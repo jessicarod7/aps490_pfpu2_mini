@@ -6,11 +6,12 @@ use critical_section::Mutex;
 use defmt::debug;
 use rp2040_hal::{
     adc::DmaReadTarget,
+    dma,
     dma::{single_buffer::Transfer, Channel, CH0},
     pac::interrupt,
 };
 
-use crate::components::{Buffers, StatusLedMulti};
+use crate::components::{Buffers, StatusLedMulti, StatusLedStates};
 
 /// Status LEDs for access in interrupts
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
@@ -45,16 +46,30 @@ fn DMA_IRQ_0() {
             .sum::<i32>()
             / 2000;
         let sample_avg = u8::try_from((avg1 - avg2).abs()).map_or(255, |avg| avg);
-        
+
         // Detetmine if enough low sample events have occurred
         critical_section::with(|cs| {
             debug!("critical_section: dma update and check longterm buffers");
             let buffers = BUFFERS.take(cs).expect(Buffers::NO_BUFFER_PANIC_MSG);
             buffers.insert(sample_avg);
+
+            debug!("critical_section: match status for correct buffer logic");
+            let status_leds = STATUS_LEDS.borrow_ref(cs);
+            if status_leds.is_some() {
+                match status_leds.as_ref().unwrap().state {
+                    StatusLedStates::Normal => /*buffers.contact_detected()*/{},
+                    StatusLedStates::Alert => /*buffers.end_contact()*/{}
+                    StatusLedStates::Error | StatusLedStates::Disabled => {}
+                }
+            }
             
             BUFFERS.replace(cs, Some(buffers));
             debug!("exit buffer critical section");
-        })
+        });
+
+        let new_dma_transfer = dma::single_buffer::Config::new(dma_ch, dma_from, avg_buffer);
+        debug!("critical_section: start new DMA transfer");
+        critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(new_dma_transfer.start())));
     } else {
         // Report error if FIFO is not active
         critical_section::with(|cs| {

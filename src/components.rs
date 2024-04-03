@@ -34,7 +34,8 @@ pub struct StatusLedMulti {
 /// Init LED GPIO pins for hnadling via interrupt
 impl StatusLedMulti {
     /// Panic message if no LEDs have been configured.
-    pub const NO_LED_PANIC_MSG: &'static str = "Unable to display state due to non-configured LEDs";
+    pub const NO_LED_PANIC_MSG: &'static str =
+        "Unable to display state due to non-configured LEDs, or not available in mutex";
     const RESET_MSG: &'static str = "\nSystem must be power cycled to restore normal operation.";
 
     pub fn init(
@@ -115,8 +116,19 @@ pub struct Buffers {
 }
 
 impl Buffers {
-    pub const NO_BUFFER_PANIC_MSG: &'static str = "Buffers have not been initialized";
-    
+    /// Initial averaged difference used for detecting contact.
+    ///
+    /// Ex. a trigger delta of 128 on a 3.3V signal requires that the average voltage range has
+    /// decreased by approximately 1.65V.
+    const INIT_TRIGGER_DELTA: u8 = 160;
+    /// Initial averaged difference to restore [`StatusLedStates::Normal`].
+    /// 
+    /// This is the increase in voltage relative to the last detection event.
+    const INIT_RESET_DELTA: u8 = 100; 
+    /// Panic message raised if buffers are not available
+    pub const NO_BUFFER_PANIC_MSG: &'static str =
+        "Buffers have not been initialized or are not currently available in mutex";
+
     /// Initialize [`BUFFERS`]
     pub fn init() {
         match singleton!(:Buffers = Self {
@@ -132,11 +144,25 @@ impl Buffers {
             None => warn!("Buffers have already been initiated"),
         }
     }
-    
+
     /// Insert a new sample at the head
-    pub fn insert(&mut self, sample: u8)  {
+    pub fn insert(&mut self, sample: u8) {
         let new_head = (self.current_sample.get() + 1) as usize % self.longterm_buffer.len();
         self.longterm_buffer[new_head] = sample;
+    }
+
+    /// Analyze the most recent data to determine if a contact event has occurred.
+    ///
+    /// Also updates the record of recent detection events
+    pub fn contact_detected(&mut self) -> bool {
+        
+        
+        todo!()
+    }
+    
+    /// Analyze the most recent data and contact events to determine when contact ends
+    pub fn end_contact(&mut self) -> bool {
+        todo!()
     }
 }
 

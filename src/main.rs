@@ -2,6 +2,7 @@
 //! for an autopsy saw.
 #![no_std]
 #![no_main]
+#![doc(html_playground_url = "https://play.rust-lang.org/")]
 
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
@@ -21,7 +22,7 @@ use rp2040_hal::{
 };
 
 use crate::{
-    components::{create_avg_buffer, StatusLedMulti},
+    components::{create_avg_buffer, Buffers, StatusLedMulti},
     interrupt::{READINGS_FIFO, STATUS_LEDS},
 };
 
@@ -44,7 +45,7 @@ pub static SIGNAL_GEN_FREQ_HZ: u32 = 100_000;
 fn main() -> ! {
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
-    let core = pac::CorePeripherals::take().unwrap();
+    let _core = pac::CorePeripherals::take().unwrap();
     let mut watchdog = Watchdog::new(pac.WATCHDOG);
     let sio = Sio::new(pac.SIO);
 
@@ -79,12 +80,15 @@ fn main() -> ! {
 
     // Setup status LEDs
     debug!("critical_section: init status LEDs");
-    critical_section::with(|cs| STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8)));
+    critical_section::with(|cs| {
+        STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8))
+    });
 
-    // Setup ADC pins
+    // Setup ADC pins, DMA, buffers
     let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);
     let mut adc_pin0 = rp2040_hal::adc::AdcPin::new(pins.gpio26.into_floating_input()).unwrap();
     let mut dma = pac.DMA.split(&mut pac.RESETS);
+    Buffers::init();
 
     // Setup first transfer
     let avg_buffer = create_avg_buffer().unwrap();
@@ -101,10 +105,9 @@ fn main() -> ! {
         .start_paused();
     dma.ch0.enable_irq0();
     let adc_dma_transfer =
-        dma::single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer)
-            .start();
+        dma::single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer);
     debug!("critical_section: transfer readings FIFO to mutex");
-    critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer)));
+    critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer.start())));
     readings_fifo.resume();
 
     loop {}
