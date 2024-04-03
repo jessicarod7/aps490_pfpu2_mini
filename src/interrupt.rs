@@ -17,7 +17,7 @@ use crate::components::{Buffers, StatusLedMulti, StatusLedStates};
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
 
-/// Wrapper for [`AdcFifo`] and [DMA `Transfer`](Transfer)
+/// Wrapper for [DMA `Transfer`](Transfer)
 pub type ReadingsDma = Transfer<Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]>;
 ///  access in interrupts
 pub static READINGS_FIFO: Mutex<RefCell<Option<ReadingsDma>>> = Mutex::new(RefCell::new(None));

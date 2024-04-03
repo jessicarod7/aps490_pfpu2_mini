@@ -3,6 +3,7 @@
 #![no_std]
 #![no_main]
 #![doc(html_playground_url = "https://play.rust-lang.org/")]
+#![warn(missing_docs)]
 
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]

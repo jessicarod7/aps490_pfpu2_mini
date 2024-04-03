@@ -34,8 +34,11 @@ pub enum StatusLedStates {
 pub struct StatusLedMulti {
     /// Current LED state
     pub state: StatusLedStates,
+    /// Typically green
     normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
+    /// Typically yellow
     alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
+    /// Typically red
     error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
 }
 
@@ -43,8 +46,10 @@ impl StatusLedMulti {
     /// Panic message if no LEDs have been configured.
     pub const NO_LED_PANIC_MSG: &'static str =
         "Unable to display state due to non-configured LEDs, or not available in mutex";
+    /// Message displayed if system enters [`StatusLedStates::Error`]
     const RESET_MSG: &'static str = "\nSystem must be power cycled to restore normal operation.";
 
+    /// Initialize LEDs
     pub fn init(
         normal_led: Pin<Gpio6, FunctionNull, PullDown>,
         alert_led: Pin<Gpio7, FunctionNull, PullDown>,
