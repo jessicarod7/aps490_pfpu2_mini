@@ -17,7 +17,7 @@ use crate::components::{Buffers, StatusLedMulti, StatusLedStates};
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
 
-/// Wrappper for [`AdcFifo`] and [DMA `Transfer`](Transfer)
+/// Wrapper for [`AdcFifo`] and [DMA `Transfer`](Transfer)
 pub type ReadingsDma = Transfer<Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]>;
 ///  access in interrupts
 pub static READINGS_FIFO: Mutex<RefCell<Option<ReadingsDma>>> = Mutex::new(RefCell::new(None));
@@ -47,7 +47,7 @@ fn DMA_IRQ_0() {
             / 2000;
         let sample_avg = u8::try_from((avg1 - avg2).abs()).map_or(255, |avg| avg);
 
-        // Detetmine if enough low sample events have occurred
+        // Determine if enough low sample events have occurred
         critical_section::with(|cs| {
             debug!("critical_section: dma update and check longterm buffers");
             let buffers = BUFFERS.take(cs).expect(Buffers::NO_BUFFER_PANIC_MSG);
@@ -57,8 +57,8 @@ fn DMA_IRQ_0() {
             let status_leds = STATUS_LEDS.borrow_ref(cs);
             if status_leds.is_some() {
                 match status_leds.as_ref().unwrap().state {
-                    StatusLedStates::Normal => /*buffers.contact_detected()*/{},
-                    StatusLedStates::Alert => /*buffers.end_contact()*/{}
+                    StatusLedStates::Normal => buffers.detect_contact(),
+                    StatusLedStates::Alert => buffers.detect_end_contact(),
                     StatusLedStates::Error | StatusLedStates::Disabled => {}
                 }
             }

@@ -10,6 +10,11 @@ use rp2040_hal::gpio::{
 
 use crate::interrupt::{BUFFERS, STATUS_LEDS};
 
+/// Number of samples stored in the long-term buffer.
+/// 
+/// Currently set to 45k averaged samples (90 s with 2 ms averaging)
+pub const LONGTERM_SIZE: usize = 45000;
+
 /// Index of a detection event, combined with voltage difference
 pub type DetectionEvent = (SampleCounter, u8);
 
@@ -25,7 +30,7 @@ pub enum StatusLedStates {
     Disabled,
 }
 
-/// Controls the status LEDs on separate pins
+/// Controls the status LEDs on separate pins. Intended for operation with three separate LEDs
 pub struct StatusLedMulti {
     /// Current LED state
     pub state: StatusLedStates,
@@ -34,7 +39,6 @@ pub struct StatusLedMulti {
     error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
 }
 
-/// Init LED GPIO pins for hnadling via interrupt
 impl StatusLedMulti {
     /// Panic message if no LEDs have been configured.
     pub const NO_LED_PANIC_MSG: &'static str =
@@ -52,6 +56,47 @@ impl StatusLedMulti {
             alert_led: alert_led.into_push_pull_output_in_state(PinState::High),
             error_led: error_led.into_push_pull_output_in_state(PinState::Low),
         })
+    }
+
+    /// Set [`StatusLedStates::Normal`] within a [`CriticalSection`]
+    pub fn set_normal(cs: CriticalSection, message: Option<&str>) {
+        let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
+        if let Some(detection_msg) = message {
+            info!("Resuming normal detection: {}", detection_msg);
+        } else {
+            error!("State changed to normal for unknown reason!");
+        }
+
+        match status.state {
+            StatusLedStates::Alert => {
+                status.alert_led.set_low().unwrap();
+                info!("Previous detection event cleared")
+            }
+            StatusLedStates::Error => status.error_led.set_low().unwrap(),
+            StatusLedStates::Normal | StatusLedStates::Disabled => {}
+        };
+        status.normal_led.set_high().unwrap();
+        status.state = StatusLedStates::Normal;
+        STATUS_LEDS.replace(cs, Some(status));
+    }
+
+    /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
+    pub fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>) {
+        let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
+        if let Some(detection_msg) = message {
+            info!("{}", detection_msg);
+        } else {
+            warn!("Unknown alert raised!");
+        }
+
+        match status.state {
+            StatusLedStates::Normal => status.normal_led.set_low().unwrap(),
+            StatusLedStates::Error => status.error_led.set_low().unwrap(),
+            StatusLedStates::Alert | StatusLedStates::Disabled => {}
+        };
+        status.alert_led.set_high().unwrap();
+        status.state = StatusLedStates::Alert;
+        STATUS_LEDS.replace(cs, Some(status));
     }
 
     /// Set [`StatusLedStates::Error`] within a [`CriticalSection`]
@@ -79,25 +124,6 @@ impl StatusLedMulti {
         status.state = StatusLedStates::Error;
         STATUS_LEDS.replace(cs, Some(status));
     }
-
-    /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
-    pub fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>) {
-        let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
-        if let Some(detection_msg) = message {
-            info!("{}", detection_msg);
-        } else {
-            warn!("Unknown alert raised!");
-        }
-
-        match status.state {
-            StatusLedStates::Normal => status.normal_led.set_low().unwrap(),
-            StatusLedStates::Error => status.error_led.set_low().unwrap(),
-            StatusLedStates::Alert | StatusLedStates::Disabled => {}
-        };
-        status.alert_led.set_high().unwrap();
-        status.state = StatusLedStates::Alert;
-        STATUS_LEDS.replace(cs, Some(status));
-    }
 }
 
 /// Monotonic counter indicating the position of averaged samples.
@@ -109,7 +135,7 @@ impl SampleCounter {
         self.0
     }
 
-    /// Increment counter (mainly used by [`Buffers.current_sample`](Buffers). An error will be
+    /// Increment counter (mainly used by [`Buffers.current_sample`](Buffers)). An error will be
     /// raised if any counter reaches [`u32::MAX`].
     pub fn increment(&mut self) {
         if self.0.checked_add(1).is_none() {
@@ -148,14 +174,15 @@ impl SampleCounter {
 
 /// Various buffers used for managing signal samples
 pub struct Buffers {
-    /// Records up to 45k averaged samples (90 s with 2 ms averaging) to determine if a detection event occurred
-    longterm_buffer: [u8; 45000],
+    /// Records samples for long-term and adaptive detection.
+    longterm_buffer: [u8; LONGTERM_SIZE],
     /// Counter for the most recent sample added to
     current_sample: SampleCounter,
     /// Rotates position time stamps for up to 10 recent detection events, comparable with `current_sample`.
     /// Most recent event is stored at index 0
     detection_events: [Option<DetectionEvent>; 10],
-    /// A potential detection event has been recorded, and the system is awaiting a second average sample
+    /// A potential detection event or event clear has been recorded, and the system is awaiting a
+    /// second sample
     await_confirm: bool,
 }
 
@@ -176,7 +203,7 @@ impl Buffers {
     /// Initialize [`BUFFERS`]
     pub fn init() {
         match singleton!(:Buffers = Self {
-            longterm_buffer: [0u8; 45000],
+            longterm_buffer: [0u8; LONGTERM_SIZE],
             current_sample: SampleCounter::default(),
             detection_events: [None; 10],
             await_confirm: false
@@ -193,7 +220,7 @@ impl Buffers {
     pub fn insert(&mut self, sample: u8) {
         let new_head = self
             .current_sample
-            .wrapping_counter_add(1, self.longterm_buffer.len());
+            .wrapping_counter_add(1, LONGTERM_SIZE);
         self.longterm_buffer[new_head] = sample;
         self.current_sample.increment();
     }
@@ -206,7 +233,7 @@ impl Buffers {
             // First contact check
             let prev_sample = self
                 .current_sample
-                .wrapping_counter_sub(1, self.longterm_buffer.len());
+                .wrapping_counter_sub(1, LONGTERM_SIZE);
             if self.longterm_buffer[prev_sample]
                 - self.longterm_buffer[self.current_sample.get_counter()]
                 >= Self::INIT_TRIGGER_DELTA
@@ -217,18 +244,54 @@ impl Buffers {
             // Validation contact check
             let prev_high_sample = self
                 .current_sample
-                .wrapping_counter_sub(2, self.longterm_buffer.len());
+                .wrapping_counter_sub(2, LONGTERM_SIZE);
             if self.longterm_buffer[prev_high_sample]
                 - self.longterm_buffer[self.current_sample.get_counter()]
                 >= Self::INIT_TRIGGER_DELTA
             {
-                //
+                // Contact detected!
                 critical_section::with(|cs| {
                     StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(self)))
                 });
                 self.add_detection_event();
+            }
+
+            // Always reset on validation check
+            self.await_confirm = false;
+        }
+    }
+
+    /// Analyze the most recent data and contact events to determine when contact ends
+    ///
+    /// A detection [`StatusLedStates::Alert`] will not clear until at least 150 samples (300 milliseconds with 2 ms
+    /// averaging) have been recorded. This ensures the operator will see the LED light up.
+    pub fn detect_end_contact(&mut self) {
+        if let Some(last_detection) = self.detection_events[0] {
+            if self
+                .current_sample
+                .wrapping_counter_sub(last_detection.0.get_counter(), LONGTERM_SIZE)
+                >= 300
+            {
+                if !self.await_confirm
+                    && self.longterm_buffer[self.current_sample.get_counter()] - last_detection.1
+                        >= Self::INIT_RESTORE_DELTA
+                {
+                    // First clear check
+                    self.await_confirm = true;
+                }
+            } else if self.await_confirm {
+                // Validation clear check
+                if self.longterm_buffer[self.current_sample.get_counter()] - last_detection.1
+                    >= Self::INIT_RESTORE_DELTA
+                {
+                    // Contact cleared!
+                    critical_section::with(|cs| StatusLedMulti::set_normal(cs, None))
+                }
+
                 self.await_confirm = false;
             }
+        } else {
+            warn!("End contact detection was called before any detection events have occurred.");
         }
     }
 
@@ -251,11 +314,6 @@ impl Buffers {
             self.current_sample,
             self.longterm_buffer[self.current_sample.get_counter()],
         ));
-    }
-
-    /// Analyze the most recent data and contact events to determine when contact ends
-    pub fn detect_end_contact(&mut self) -> bool {
-        todo!()
     }
 }
 
