@@ -11,9 +11,10 @@ use rp2040_hal::{
     pac::interrupt,
 };
 
-use crate::components::{Buffers, StatusLedMulti, StatusLedStates};
+use crate::components::{Buffers, StatusLed, StatusLedMulti, StatusLedStates};
 
 /// Status LEDs for access in interrupts
+#[cfg(feature = "multi_status")]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
 
@@ -74,6 +75,7 @@ fn DMA_IRQ_0() {
         // Report error if FIFO is not active
         critical_section::with(|cs| {
             debug!("critical_section: dma set_error for no active FIFO");
+            #[cfg(feature = "multi_status")]
             StatusLedMulti::set_error(
                 cs,
                 Some("No ADC transfer in progress! Unable to collect latest readings"),

@@ -11,7 +11,7 @@ use rp2040_hal::gpio::{
 use crate::interrupt::{BUFFERS, STATUS_LEDS};
 
 /// Number of samples stored in the long-term buffer.
-/// 
+///
 /// Currently set to 45k averaged samples (90 s with 2 ms averaging)
 pub const LONGTERM_SIZE: usize = 45000;
 
@@ -30,6 +30,28 @@ pub enum StatusLedStates {
     Disabled,
 }
 
+/// System status is communicated via a trio of LED colours (see [`StatusLedStates`]).
+pub trait StatusLed {
+    /// Panic message if no LEDs have been configured.
+    const NO_LED_PANIC_MSG: &'static str =
+        "Unable to display state due to non-configured LEDs, or not available in mutex";
+    /// Message displayed if system enters [`StatusLedStates::Error`]
+    const RESET_MSG: &'static str = "\nSystem must be power cycled to restore normal operation.";
+
+    /// Initialize LEDs
+    fn init(
+        normal_led: Pin<Gpio6, FunctionNull, PullDown>,
+        alert_led: Pin<Gpio7, FunctionNull, PullDown>,
+        error_led: Pin<Gpio8, FunctionNull, PullDown>,
+    ) -> Option<&'static mut Self>;
+    /// Set [`StatusLedStates::Normal`] within a [`CriticalSection`]
+    fn set_normal(cs: CriticalSection, message: Option<&str>);
+    /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
+    fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>);
+    /// Set [`StatusLedStates::Error`] within a [`CriticalSection`]
+    fn set_error(cs: CriticalSection, message: Option<&str>);
+}
+
 /// Controls the status LEDs on separate pins. Intended for operation with three separate LEDs
 pub struct StatusLedMulti {
     /// Current LED state
@@ -42,15 +64,8 @@ pub struct StatusLedMulti {
     error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
 }
 
-impl StatusLedMulti {
-    /// Panic message if no LEDs have been configured.
-    pub const NO_LED_PANIC_MSG: &'static str =
-        "Unable to display state due to non-configured LEDs, or not available in mutex";
-    /// Message displayed if system enters [`StatusLedStates::Error`]
-    const RESET_MSG: &'static str = "\nSystem must be power cycled to restore normal operation.";
-
-    /// Initialize LEDs
-    pub fn init(
+impl StatusLed for StatusLedMulti {
+    fn init(
         normal_led: Pin<Gpio6, FunctionNull, PullDown>,
         alert_led: Pin<Gpio7, FunctionNull, PullDown>,
         error_led: Pin<Gpio8, FunctionNull, PullDown>,
@@ -63,8 +78,7 @@ impl StatusLedMulti {
         })
     }
 
-    /// Set [`StatusLedStates::Normal`] within a [`CriticalSection`]
-    pub fn set_normal(cs: CriticalSection, message: Option<&str>) {
+    fn set_normal(cs: CriticalSection, message: Option<&str>) {
         let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
         if let Some(detection_msg) = message {
             info!("Resuming normal detection: {}", detection_msg);
@@ -85,8 +99,7 @@ impl StatusLedMulti {
         STATUS_LEDS.replace(cs, Some(status));
     }
 
-    /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
-    pub fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>) {
+    fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>) {
         let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
         if let Some(detection_msg) = message {
             info!("{}", detection_msg);
@@ -104,8 +117,7 @@ impl StatusLedMulti {
         STATUS_LEDS.replace(cs, Some(status));
     }
 
-    /// Set [`StatusLedStates::Error`] within a [`CriticalSection`]
-    pub fn set_error(cs: CriticalSection, message: Option<&str>) {
+    fn set_error(cs: CriticalSection, message: Option<&str>) {
         let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
         if let Some(msg_text) = message {
             error!(
@@ -146,6 +158,7 @@ impl SampleCounter {
         if self.0.checked_add(1).is_none() {
             critical_section::with(|cs| {
                 debug!("critical_section: counter set_error overflow");
+                #[cfg(feature = "multi_status")]
                 StatusLedMulti::set_error(
                     cs,
                     Some("No ADC transfer in progress! Unable to collect latest readings"),
@@ -223,9 +236,7 @@ impl Buffers {
 
     /// Insert a new sample at the head
     pub fn insert(&mut self, sample: u8) {
-        let new_head = self
-            .current_sample
-            .wrapping_counter_add(1, LONGTERM_SIZE);
+        let new_head = self.current_sample.wrapping_counter_add(1, LONGTERM_SIZE);
         self.longterm_buffer[new_head] = sample;
         self.current_sample.increment();
     }
@@ -236,9 +247,7 @@ impl Buffers {
     pub fn detect_contact(&mut self) {
         if !self.await_confirm {
             // First contact check
-            let prev_sample = self
-                .current_sample
-                .wrapping_counter_sub(1, LONGTERM_SIZE);
+            let prev_sample = self.current_sample.wrapping_counter_sub(1, LONGTERM_SIZE);
             if self.longterm_buffer[prev_sample]
                 - self.longterm_buffer[self.current_sample.get_counter()]
                 >= Self::INIT_TRIGGER_DELTA
@@ -247,15 +256,14 @@ impl Buffers {
             }
         } else {
             // Validation contact check
-            let prev_high_sample = self
-                .current_sample
-                .wrapping_counter_sub(2, LONGTERM_SIZE);
+            let prev_high_sample = self.current_sample.wrapping_counter_sub(2, LONGTERM_SIZE);
             if self.longterm_buffer[prev_high_sample]
                 - self.longterm_buffer[self.current_sample.get_counter()]
                 >= Self::INIT_TRIGGER_DELTA
             {
                 // Contact detected!
                 critical_section::with(|cs| {
+                    #[cfg(feature = "multi_status")]
                     StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(self)))
                 });
                 self.add_detection_event();
@@ -290,7 +298,10 @@ impl Buffers {
                     >= Self::INIT_RESTORE_DELTA
                 {
                     // Contact cleared!
-                    critical_section::with(|cs| StatusLedMulti::set_normal(cs, None))
+                    critical_section::with(|cs| {
+                        #[cfg(feature = "multi_status")]
+                        StatusLedMulti::set_normal(cs, None)
+                    })
                 }
 
                 self.await_confirm = false;

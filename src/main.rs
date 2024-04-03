@@ -8,6 +8,7 @@
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
 use defmt_rtt as _;
+use embedded_hal::pwm::SetDutyCycle;
 #[allow(unused_imports)]
 use panic_probe as _;
 use rp2040_hal::{
@@ -19,6 +20,7 @@ use rp2040_hal::{
     gpio::Pins,
     pac,
     prelude::*,
+    pwm::Slices,
     Adc, Sio, Watchdog,
 };
 
@@ -26,6 +28,7 @@ use crate::{
     components::{create_avg_buffer, Buffers, StatusLedMulti},
     interrupt::{READINGS_FIFO, STATUS_LEDS},
 };
+use crate::components::StatusLed;
 
 mod components;
 mod interrupt;
@@ -44,6 +47,9 @@ pub static SIGNAL_GEN_FREQ_HZ: u32 = 100_000;
 /// Main operation loop
 #[entry]
 fn main() -> ! {
+    #[cfg(all(feature = "multi_status", feature = "rgba_status"))]
+    panic!("Please select one LED status feature: `multi_status` or `rgba_status`");
+
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
     let _core = pac::CorePeripherals::take().unwrap();
@@ -82,8 +88,21 @@ fn main() -> ! {
     // Setup status LEDs
     debug!("critical_section: init status LEDs");
     critical_section::with(|cs| {
+        #[cfg(feature = "multi_status")]
         STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8))
     });
+
+    // Initialize and start signal generator
+    let mut pwm_slices = Slices::new(pac.PWM, &mut pac.RESETS);
+    pwm_slices
+        .pwm3
+        // Ex. 24 MHz clock generates 100 kHz signal ->  240 clk cycles per PWM cycle (`top`)
+        // with 50% duty cycle
+        .set_top(((clocks.system_clock.freq().to_Hz() / SIGNAL_GEN_FREQ_HZ) - 1) as u16);
+    pwm_slices.pwm3.enable();
+    let mut signal_gen = pwm_slices.pwm3.channel_a;
+    signal_gen.output_to(pins.gpio22);
+    signal_gen.set_duty_cycle_percent(50).unwrap();
 
     // Setup ADC pins, DMA, buffers
     let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);

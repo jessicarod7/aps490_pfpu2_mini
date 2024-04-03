@@ -19,6 +19,13 @@ panic-probe = { version = "0.3", features = ["print-defmt"] }
 rp2040-hal = { version = "0.10", features = ["rt", "critical-section-impl", "defmt"] }
 rp2040-boot2 = "0.3"
 
+[features]
+default = ["multi_status"]
+# Controls three separate status LEDs
+multi_status = []
+# Controls a single, common-anode RGB LED
+rgba_status = []
+
 # cargo build/run
 [profile.dev]
 codegen-units = 1
