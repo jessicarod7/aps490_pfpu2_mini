@@ -132,6 +132,7 @@ impl Buffers {
     ///
     /// Also updates the record of recent detection events
     pub fn detect_contact(&mut self) {
+        debug!("Checking for contact");
         if !self.await_confirm {
             // First contact check
             let prev_sample = self.current_sample.wrapping_counter_sub(1, LONGTERM_SIZE);
@@ -166,6 +167,7 @@ impl Buffers {
     /// A detection [`StatusLedStates::Alert`] will not clear until at least 150 samples (300 milliseconds with 2 ms
     /// averaging) have been recorded. This ensures the operator will see the LED light up.
     pub fn detect_end_contact(&mut self) {
+        debug!("Checking for end of contact");
         if let Some(last_detection) = self.detection_events[0] {
             if self
                 .current_sample

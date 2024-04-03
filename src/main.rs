@@ -5,6 +5,7 @@
 #![doc(html_playground_url = "https://play.rust-lang.org/")]
 #![warn(missing_docs)]
 
+use buffer::{create_avg_buffer, Buffers};
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
 use defmt_rtt as _;
@@ -12,7 +13,6 @@ use embedded_hal::pwm::SetDutyCycle;
 #[allow(unused_imports)]
 use panic_probe as _;
 use rp2040_hal::{
-    Adc,
     clocks::init_clocks_and_plls,
     dma,
     dma::{DMAExt, SingleChannel},
@@ -21,19 +21,18 @@ use rp2040_hal::{
     gpio::Pins,
     pac,
     prelude::*,
-    pwm::Slices, Sio, Watchdog,
+    pwm::Slices,
+    Adc, Sio, Watchdog,
 };
-use buffer::{Buffers, create_avg_buffer};
 
 use crate::{
-    components::StatusLedMulti,
+    components::{StatusLed, StatusLedMulti},
     interrupt::{READINGS_FIFO, STATUS_LEDS},
 };
-use crate::components::StatusLed;
 
+mod buffer;
 mod components;
 mod interrupt;
-mod buffer;
 
 /// Second-stage bootloader, from [rp2040-boot2](https://docs.rs/rp2040-boot2)
 #[link_section = ".boot2"]
@@ -132,5 +131,13 @@ fn main() -> ! {
     critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer.start())));
     readings_fifo.resume();
 
-    loop {}
+    // Begin normal system operation
+    critical_section::with(|cs| {
+        StatusLedMulti::set_normal(cs, Some("System initialization complete"))
+    });
+    unsafe { pac::NVIC::unmask(pac::Interrupt::DMA_IRQ_0) }
+    loop {
+        // All functionality in interrupts
+        cortex_m::asm::wfi();
+    }
 }

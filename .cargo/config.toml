@@ -9,7 +9,7 @@ runner = ["probe-rs",
   "--protocol",
   "swd",
   "--log-format",
-  "{[{L:severity}] {m:severity}%40}: {s} "
+  "{[{L:severity}] {f:severity}:{l:severity}%27}=> {s}"
 ]
 # runner = "elf2uf2-rs -d"
 
