@@ -3,18 +3,20 @@
 #![no_std]
 #![no_main]
 
-use core::cell::RefCell;
-use critical_section::Mutex;
 use defmt::{info, warn};
 #[allow(unused_imports)]
 use defmt_rtt as _;
 #[allow(unused_imports)]
 use panic_probe as _;
-use rp2040_hal::{entry, pac, prelude::*, Sio, Watchdog};
-use rp2040_hal::clocks::init_clocks_and_plls;
-use rp2040_hal::fugit::RateExtU32;
-use rp2040_hal::gpio::Pins;
-use crate::components::StatusLed;
+use rp2040_hal::{
+    clocks::init_clocks_and_plls, dma, dma::DMAExt, entry, fugit::RateExtU32, gpio::Pins, pac,
+    prelude::*, Adc, Sio, Watchdog,
+};
+
+use crate::{
+    components::{create_avg_buffer, StatusLedMulti},
+    interrupt::{READINGS_FIFO, STATUS_LEDS},
+};
 
 mod components;
 mod interrupt;
@@ -48,8 +50,8 @@ fn main() -> ! {
         &mut pac.RESETS,
         &mut watchdog,
     )
-        .ok()
-        .unwrap();
+    .ok()
+    .unwrap();
     // Attempt to switch system to 24 MHz for efficiency
     clocks
         .system_clock
@@ -67,9 +69,34 @@ fn main() -> ! {
         sio.gpio_bank0,
         &mut pac.RESETS,
     );
-    
-    /// Setup LED pins
-    let status_leds = StatusLed::init(pins.gpio6, pins.gpio7, pins.gpio8);
-    
+
+    // Setup status LEDs
+    let status_leds = StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8);
+    critical_section::with(|cs| STATUS_LEDS.replace(cs, Some(status_leds)));
+
+    // Setup ADC pins
+    let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);
+    let mut adc_pin0 = rp2040_hal::adc::AdcPin::new(pins.gpio26.into_floating_input()).unwrap();
+    let mut dma = pac.DMA.split(&mut pac.RESETS);
+
+    // Setup first transfer
+    let avg_buffer = create_avg_buffer().unwrap();
+    let mut readings_fifo = adc
+        .build_fifo()
+        .set_channel(&mut adc_pin0)
+        // Ex. 24 MHz clock at 200 ksamples/s (2x SIGNAL_FREQ_KHZ) -> sample every 120 clk cycles
+        .clock_divider(
+            ((clocks.system_clock.freq().to_Hz() / (2 * SIGNAL_GEN_FREQ_HZ)) - 1) as u16,
+            0,
+        )
+        .shift_8bit()
+        .enable_dma()
+        .start_paused();
+    let adc_dma_transfer =
+        dma::single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer)
+            .start();
+    critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer)));
+    readings_fifo.resume();
+
     loop {}
 }
