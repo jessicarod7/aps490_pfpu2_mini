@@ -66,7 +66,7 @@ fn main() -> ! {
         .configure_clock(&clocks.reference_clock, SYS_CLOCK_FREQ.Hz())
         .unwrap_or_else(|err| {
             warn!(
-                "Unable to downscale clock speed: {}\nClocks will continue to run at {}",
+                "Unable to downscale clock speed: {}\nClocks will continue to run at {=u32}",
                 err,
                 clocks.system_clock.freq().to_Hz()
             )

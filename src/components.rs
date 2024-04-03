@@ -1,7 +1,7 @@
 //! Basic component structs
 use cortex_m::singleton;
 use critical_section::CriticalSection;
-use defmt::{debug, error, warn};
+use defmt::{debug, error, info, warn, Format, Formatter};
 use embedded_hal::digital::{OutputPin, PinState};
 use rp2040_hal::gpio::{
     bank0::{Gpio6, Gpio7, Gpio8},
@@ -9,6 +9,9 @@ use rp2040_hal::gpio::{
 };
 
 use crate::interrupt::{BUFFERS, STATUS_LEDS};
+
+/// Index of a detection event, combined with voltage difference
+pub type DetectionEvent = (SampleCounter, u8);
 
 /// All states for LEDs
 pub enum StatusLedStates {
@@ -51,19 +54,18 @@ impl StatusLedMulti {
         })
     }
 
-    /// Set error state within a [`CriticalSection`]
+    /// Set [`StatusLedStates::Error`] within a [`CriticalSection`]
     pub fn set_error(cs: CriticalSection, message: Option<&str>) {
         let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
-
         if let Some(msg_text) = message {
             error!(
-                "Error encountered during operation:\n{}{}",
+                "Error encountered during operation:\n{=str}{=str}",
                 msg_text,
                 Self::RESET_MSG
             );
         } else {
             error!(
-                "Unknown error encountered during operation.{}",
+                "Unknown error encountered during operation.{=str}",
                 Self::RESET_MSG
             );
         }
@@ -73,18 +75,37 @@ impl StatusLedMulti {
             StatusLedStates::Alert => status.alert_led.set_low().unwrap(),
             StatusLedStates::Error | StatusLedStates::Disabled => {}
         };
-
         status.error_led.set_high().unwrap();
+        status.state = StatusLedStates::Error;
+        STATUS_LEDS.replace(cs, Some(status));
+    }
+
+    /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
+    pub fn set_alert(cs: CriticalSection, message: Option<DetectionMsg>) {
+        let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
+        if let Some(detection_msg) = message {
+            info!("{}", detection_msg);
+        } else {
+            warn!("Unknown alert raised!");
+        }
+
+        match status.state {
+            StatusLedStates::Normal => status.normal_led.set_low().unwrap(),
+            StatusLedStates::Error => status.error_led.set_low().unwrap(),
+            StatusLedStates::Alert | StatusLedStates::Disabled => {}
+        };
+        status.alert_led.set_high().unwrap();
+        status.state = StatusLedStates::Alert;
         STATUS_LEDS.replace(cs, Some(status));
     }
 }
 
 /// Monotonic counter indicating the position of averaged samples.
 #[derive(Default, Debug, Ord, PartialOrd, Eq, PartialEq, Copy, Clone)]
-pub struct SampleCounter(u32);
+pub struct SampleCounter(usize);
 impl SampleCounter {
     /// Get current counter value
-    pub fn get(&self) -> u32 {
+    pub fn get_counter(&self) -> usize {
         self.0
     }
 
@@ -101,6 +122,28 @@ impl SampleCounter {
             })
         }
     }
+
+    /// Add with defined wrapping. Result will be within range \[0, `limit` - 1\].
+    ///
+    /// Used to index [`Buffers.longterm_buffer`](Buffers)
+    pub fn wrapping_counter_add(&self, rhs: usize, limit: usize) -> usize {
+        if self.0 + rhs >= limit {
+            rhs - (limit - self.0)
+        } else {
+            self.0 + rhs
+        }
+    }
+
+    /// Subtract with defined wrapping. Limit will be within range \[0, `limit` - 1\].
+    ///
+    /// Used to index [`Buffers.longterm_buffer`](Buffers)
+    pub fn wrapping_counter_sub(&self, rhs: usize, limit: usize) -> usize {
+        if self.0.wrapping_sub(rhs) >= limit {
+            limit - (rhs - self.0)
+        } else {
+            self.0 - rhs
+        }
+    }
 }
 
 /// Various buffers used for managing signal samples
@@ -109,8 +152,9 @@ pub struct Buffers {
     longterm_buffer: [u8; 45000],
     /// Counter for the most recent sample added to
     current_sample: SampleCounter,
-    /// Indicates position time stamps for up to 10 recent detection events, comparable with `current_sample`
-    detection_events: [SampleCounter; 10],
+    /// Rotates position time stamps for up to 10 recent detection events, comparable with `current_sample`.
+    /// Most recent event is stored at index 0
+    detection_events: [Option<DetectionEvent>; 10],
     /// A potential detection event has been recorded, and the system is awaiting a second average sample
     await_confirm: bool,
 }
@@ -122,9 +166,9 @@ impl Buffers {
     /// decreased by approximately 1.65V.
     const INIT_TRIGGER_DELTA: u8 = 160;
     /// Initial averaged difference to restore [`StatusLedStates::Normal`].
-    /// 
+    ///
     /// This is the increase in voltage relative to the last detection event.
-    const INIT_RESET_DELTA: u8 = 100; 
+    const INIT_RESTORE_DELTA: u8 = 100;
     /// Panic message raised if buffers are not available
     pub const NO_BUFFER_PANIC_MSG: &'static str =
         "Buffers have not been initialized or are not currently available in mutex";
@@ -134,7 +178,7 @@ impl Buffers {
         match singleton!(:Buffers = Self {
             longterm_buffer: [0u8; 45000],
             current_sample: SampleCounter::default(),
-            detection_events: [SampleCounter::default(); 10],
+            detection_events: [None; 10],
             await_confirm: false
         }) {
             Some(init_buffers) => {
@@ -147,22 +191,91 @@ impl Buffers {
 
     /// Insert a new sample at the head
     pub fn insert(&mut self, sample: u8) {
-        let new_head = (self.current_sample.get() + 1) as usize % self.longterm_buffer.len();
+        let new_head = self
+            .current_sample
+            .wrapping_counter_add(1, self.longterm_buffer.len());
         self.longterm_buffer[new_head] = sample;
+        self.current_sample.increment();
     }
 
     /// Analyze the most recent data to determine if a contact event has occurred.
     ///
     /// Also updates the record of recent detection events
-    pub fn contact_detected(&mut self) -> bool {
-        
-        
+    pub fn detect_contact(&mut self) {
+        if !self.await_confirm {
+            // First contact check
+            let prev_sample = self
+                .current_sample
+                .wrapping_counter_sub(1, self.longterm_buffer.len());
+            if self.longterm_buffer[prev_sample]
+                - self.longterm_buffer[self.current_sample.get_counter()]
+                >= Self::INIT_TRIGGER_DELTA
+            {
+                self.await_confirm = true;
+            }
+        } else {
+            // Validation contact check
+            let prev_high_sample = self
+                .current_sample
+                .wrapping_counter_sub(2, self.longterm_buffer.len());
+            if self.longterm_buffer[prev_high_sample]
+                - self.longterm_buffer[self.current_sample.get_counter()]
+                >= Self::INIT_TRIGGER_DELTA
+            {
+                //
+                critical_section::with(|cs| {
+                    StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(self)))
+                });
+                self.add_detection_event();
+                self.await_confirm = false;
+            }
+        }
+    }
+
+    /// Shortcut to return index of a successful detection sample.
+    ///
+    ///```
+    /// static BUFFERS = Buffers::init();
+    ///
+    /// BUFFERS.insert(12);
+    /// assert_eq!(BUFFERS.detection_idx(), BUFFERS.current_sample.get_counter() - 1)
+    ///```
+    pub fn detection_idx(&self) -> usize {
+        self.current_sample.get_counter() - 1
+    }
+
+    /// Add an entry to the `detection_events` array, based on the penultimate sample.
+    fn add_detection_event(&mut self) {
+        self.detection_events.rotate_right(1);
+        self.detection_events[0] = Some((
+            self.current_sample,
+            self.longterm_buffer[self.current_sample.get_counter()],
+        ));
+    }
+
+    /// Analyze the most recent data and contact events to determine when contact ends
+    pub fn detect_end_contact(&mut self) -> bool {
         todo!()
     }
-    
-    /// Analyze the most recent data and contact events to determine when contact ends
-    pub fn end_contact(&mut self) -> bool {
-        todo!()
+}
+
+/// Newtype to send formatted error messages when [`Buffers::detect_contact`] is successful.
+pub struct DetectionMsg(SampleCounter);
+impl DetectionMsg {
+    /// Create a detection message:
+    ///
+    /// > "contact detected on sample {[`Buffers::detection_idx`]}! Adding to detection events"`
+    fn create(buffer: &Buffers) -> Self {
+        Self(SampleCounter(buffer.detection_idx()))
+    }
+}
+impl Format for DetectionMsg {
+    fn format(&self, fmt: Formatter) {
+        defmt::write!(
+            fmt,
+            "contact detected on sample {}! Adding to detection events",
+            self.0.get_counter()
+        )
     }
 }
 
