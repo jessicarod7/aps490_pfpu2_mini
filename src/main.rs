@@ -3,14 +3,21 @@
 #![no_std]
 #![no_main]
 
-use defmt::{info, warn};
+use defmt::{debug, info, warn};
 #[allow(unused_imports)]
 use defmt_rtt as _;
 #[allow(unused_imports)]
 use panic_probe as _;
 use rp2040_hal::{
-    clocks::init_clocks_and_plls, dma, dma::DMAExt, entry, fugit::RateExtU32, gpio::Pins, pac,
-    prelude::*, Adc, Sio, Watchdog,
+    clocks::init_clocks_and_plls,
+    dma,
+    dma::{DMAExt, SingleChannel},
+    entry,
+    fugit::RateExtU32,
+    gpio::Pins,
+    pac,
+    prelude::*,
+    Adc, Sio, Watchdog,
 };
 
 use crate::{
@@ -71,8 +78,8 @@ fn main() -> ! {
     );
 
     // Setup status LEDs
-    let status_leds = StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8);
-    critical_section::with(|cs| STATUS_LEDS.replace(cs, Some(status_leds)));
+    debug!("critical_section: init status LEDs");
+    critical_section::with(|cs| STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8)));
 
     // Setup ADC pins
     let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);
@@ -92,9 +99,11 @@ fn main() -> ! {
         .shift_8bit()
         .enable_dma()
         .start_paused();
+    dma.ch0.enable_irq0();
     let adc_dma_transfer =
         dma::single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer)
             .start();
+    debug!("critical_section: transfer readings FIFO to mutex");
     critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer)));
     readings_fifo.resume();
 
