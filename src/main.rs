@@ -43,7 +43,7 @@ pub const XOSC_FREQ_HZ: u32 = 12_000_000;
 /// Attempt to run system clock at 24 MHz
 pub const SYS_CLOCK_FREQ: u32 = 24_000_000;
 /// Frequency of detection signal is 100 kHz
-pub static SIGNAL_GEN_FREQ_HZ: u32 = 100_000;
+pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 
 /// Main operation loop
 #[entry]
@@ -57,6 +57,8 @@ fn main() -> ! {
     let mut watchdog = Watchdog::new(pac.WATCHDOG);
     let sio = Sio::new(pac.SIO);
 
+    // Rescale other calculations based on system clock
+    let mut sysclk_rescale = 1f32;
     let mut clocks = init_clocks_and_plls(
         XOSC_FREQ_HZ,
         pac.XOSC,
@@ -77,7 +79,8 @@ fn main() -> ! {
                 "Unable to downscale clock speed: {}\nClocks will continue to run at {=u32}",
                 err,
                 clocks.system_clock.freq().to_Hz()
-            )
+            );
+            sysclk_rescale = clocks.system_clock.freq().to_Hz() as f32 / SYS_CLOCK_FREQ as f32;
         });
     let pins = Pins::new(
         pac.IO_BANK0,
@@ -99,7 +102,10 @@ fn main() -> ! {
         .pwm3
         // Ex. 24 MHz clock generates 100 kHz signal ->  240 clk cycles per PWM cycle (`top`)
         // with 50% duty cycle
-        .set_top(((clocks.system_clock.freq().to_Hz() / SIGNAL_GEN_FREQ_HZ) - 1) as u16);
+        .set_top(
+            ((clocks.system_clock.freq().to_Hz() as f32 / (SIGNAL_GEN_FREQ_HZ * sysclk_rescale))
+                - 1.0) as u16,
+        );
     pwm_slices.pwm3.enable();
     let mut signal_gen = pwm_slices.pwm3.channel_a;
     signal_gen.output_to(pins.gpio22);
@@ -118,7 +124,9 @@ fn main() -> ! {
         .set_channel(&mut adc_pin0)
         // Ex. 24 MHz clock at 200 ksamples/s (2x SIGNAL_FREQ_KHZ) -> sample every 120 clk cycles
         .clock_divider(
-            ((clocks.system_clock.freq().to_Hz() / (2 * SIGNAL_GEN_FREQ_HZ)) - 1) as u16,
+            ((clocks.system_clock.freq().to_Hz() as f32
+                / (2.0 * (SIGNAL_GEN_FREQ_HZ * sysclk_rescale)))
+                - 1.0) as u16,
             0,
         )
         .shift_8bit()

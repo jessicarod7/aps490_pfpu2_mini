@@ -1,7 +1,7 @@
 use cortex_m::singleton;
-use defmt::{debug, warn, Format, Formatter};
 #[allow(unused_imports)]
 use defmt::trace;
+use defmt::{debug, warn, Format, Formatter};
 
 use crate::{
     components::{StatusLed, StatusLedMulti},
@@ -29,15 +29,16 @@ impl SampleCounter {
     /// Increment counter (mainly used by [`Buffers.current_sample`](Buffers)). An error will be
     /// raised if any counter reaches [`u32::MAX`].
     pub fn increment(&mut self) {
-        if self.0.checked_add(1).is_none() {
-            critical_section::with(|cs| {
+        match self.0.checked_add(1) {
+            None => critical_section::with(|cs| {
                 debug!("critical_section: counter set_error overflow");
                 #[cfg(feature = "multi_status")]
                 StatusLedMulti::set_error(
                     cs,
                     Some("No ADC transfer in progress! Unable to collect latest readings"),
                 )
-            })
+            }),
+            Some(new_counter) => self.0 = new_counter,
         }
     }
 
@@ -110,21 +111,28 @@ impl Buffers {
 
     /// Returns [`SampleCounter::get_counter`] wrapped to [`LONGTERM_SIZE`]
     pub fn current_wrapped(&self) -> SampleCounter {
-        SampleCounter(self.current_sample.get_counter() % LONGTERM_SIZE) 
+        SampleCounter(self.current_sample.get_counter() % LONGTERM_SIZE)
     }
-    
+
     /// Insert a new sample at the head
     pub fn insert(&mut self, sample: u8) {
-        let new_head = self.current_wrapped().wrapping_counter_add(1, LONGTERM_SIZE);
+        let new_head = self
+            .current_wrapped()
+            .wrapping_counter_add(1, LONGTERM_SIZE);
         self.longterm_buffer[new_head] = sample;
         self.current_sample.increment();
-        
+
         // Comment out cfg to trace all samples
-        #[cfg(feature = "")]
+        // #[cfg(feature = "")]
         if self.current_sample.get_counter() % 250 == 0 {
-            let first_sample = self.current_wrapped().wrapping_counter_sub(250, LONGTERM_SIZE);
-            let new_samples = self.longterm_buffer.get(first_sample..first_sample+250).unwrap();
-            trace!("Here are the last 250 samples:\n{}", new_samples)
+            let first_sample = self
+                .current_wrapped()
+                .wrapping_counter_sub(250, LONGTERM_SIZE);
+            let new_samples = self
+                .longterm_buffer
+                .get(first_sample..first_sample + 250)
+                .unwrap();
+            trace!("Here are the last 250 samples:\n{:#?}", new_samples)
         }
     }
 
