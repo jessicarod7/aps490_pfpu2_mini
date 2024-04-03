@@ -57,12 +57,13 @@ fn DMA_IRQ_0() {
                 acc
             });
             trace!(
-                "max: {} // min: {} // avg1: {} // avg2: {} \n-> all_unique samples: {}",
+                "max: {} // min: {} // avg1: {} // avg2: {} // 20 samples: {}\n-> all_unique samples: {}",
                 avg_buffer.iter().max(),
                 avg_buffer.iter().min(),
                 avg1,
                 avg2,
-                unique_samples
+                avg_buffer.get(0..20).unwrap(),
+                /*unique_samples*/ 0
             );
         }
         let sample_avg = u8::try_from((avg1 - avg2).abs()).map_or(255, |avg| avg);
