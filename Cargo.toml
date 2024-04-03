@@ -27,6 +27,10 @@ default = ["multi_status"]
 multi_status = []
 # Controls a single, common-anode RGB LED
 rgba_status = []
+# Enables trace messages for all averages
+trace_avg_samples = []
+# Enables trace messages for every averaged sample
+trace_indiv_samples= []
 
 # cargo build/run
 [profile.dev]

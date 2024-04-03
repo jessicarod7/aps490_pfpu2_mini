@@ -123,7 +123,7 @@ impl Buffers {
         self.current_sample.increment();
 
         // Comment out cfg to trace all samples
-        // #[cfg(feature = "")]
+        #[cfg(feature = "trace_avg_samples")]
         if self.current_sample.get_counter() % 250 == 0 {
             let first_sample = self
                 .current_wrapped()
@@ -132,7 +132,7 @@ impl Buffers {
                 .longterm_buffer
                 .get(first_sample..first_sample + 250)
                 .unwrap();
-            trace!("Here are the last 250 samples:\n{:#?}", new_samples)
+            trace!("Here are the last 250 samples:\n{=[u8]:b}", new_samples)
         }
     }
 
@@ -144,8 +144,7 @@ impl Buffers {
         if !self.await_confirm {
             // First contact check
             let prev_sample = self.current_sample.wrapping_counter_sub(1, LONGTERM_SIZE);
-            if self.longterm_buffer[prev_sample]
-                - self.longterm_buffer[self.current_sample.get_counter()]
+            if self.longterm_buffer[prev_sample].saturating_sub(self.longterm_buffer[self.current_sample.get_counter()])
                 >= Self::INIT_TRIGGER_DELTA
             {
                 self.await_confirm = true;
@@ -153,8 +152,7 @@ impl Buffers {
         } else {
             // Validation contact check
             let prev_high_sample = self.current_sample.wrapping_counter_sub(2, LONGTERM_SIZE);
-            if self.longterm_buffer[prev_high_sample]
-                - self.longterm_buffer[self.current_sample.get_counter()]
+            if self.longterm_buffer[prev_high_sample].saturating_sub(self.longterm_buffer[self.current_sample.get_counter()])
                 >= Self::INIT_TRIGGER_DELTA
             {
                 // Contact detected!
@@ -183,7 +181,7 @@ impl Buffers {
                 >= 300
             {
                 if !self.await_confirm
-                    && self.longterm_buffer[self.current_sample.get_counter()] - last_detection.1
+                    && self.longterm_buffer[self.current_sample.get_counter()].saturating_sub(last_detection.1)
                         >= Self::INIT_RESTORE_DELTA
                 {
                     // First clear check
@@ -191,7 +189,7 @@ impl Buffers {
                 }
             } else if self.await_confirm {
                 // Validation clear check
-                if self.longterm_buffer[self.current_sample.get_counter()] - last_detection.1
+                if self.longterm_buffer[self.current_sample.get_counter()].saturating_sub(last_detection.1)
                     >= Self::INIT_RESTORE_DELTA
                 {
                     // Contact cleared!

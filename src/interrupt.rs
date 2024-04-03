@@ -3,16 +3,18 @@
 use core::cell::RefCell;
 
 use critical_section::Mutex;
-use defmt::debug;
+use defmt::{debug, trace};
 use rp2040_hal::{
     adc::DmaReadTarget,
     dma,
-    dma::{CH0, Channel, single_buffer::Transfer},
+    dma::{single_buffer::Transfer, Channel, CH0},
     pac::interrupt,
 };
-use crate::buffer::Buffers;
 
-use crate::components::{StatusLed, StatusLedMulti, StatusLedStates};
+use crate::{
+    buffer::Buffers,
+    components::{StatusLed, StatusLedMulti, StatusLedStates},
+};
 
 /// Status LEDs for access in interrupts
 #[cfg(feature = "multi_status")]
@@ -47,6 +49,22 @@ fn DMA_IRQ_0() {
             .map(|i| *i as i32)
             .sum::<i32>()
             / 2000;
+        
+        #[cfg(feature = "trace_indiv_samples")]
+        {
+            let unique_samples = avg_buffer.iter().fold([None; 256], |mut acc, s| {
+                acc[*s as usize] = Some(s);
+                acc
+            });
+            trace!(
+                "max: {} // min: {} // avg1: {} // avg2: {} \n-> all_unique samples: {}",
+                avg_buffer.iter().max(),
+                avg_buffer.iter().min(),
+                avg1,
+                avg2,
+                unique_samples
+            );
+        }
         let sample_avg = u8::try_from((avg1 - avg2).abs()).map_or(255, |avg| avg);
 
         // Determine if enough low sample events have occurred
@@ -64,7 +82,7 @@ fn DMA_IRQ_0() {
                     StatusLedStates::Error | StatusLedStates::Disabled => {}
                 }
             }
-            
+
             BUFFERS.replace(cs, Some(buffers));
             debug!("exit buffer critical section");
         });
