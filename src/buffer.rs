@@ -1,12 +1,14 @@
 use cortex_m::singleton;
 use defmt::{debug, warn, Format, Formatter};
+#[allow(unused_imports)]
+use defmt::trace;
 
 use crate::{
     components::{StatusLed, StatusLedMulti},
     interrupt::BUFFERS,
 };
 
-/// Number of samples stored in the long-term buffer.
+/// Number of samples stored in the long-term buffer. Should be a multiple of 250 for tracing purposes
 ///
 /// Currently set to 45k averaged samples (90 s with 2 ms averaging)
 pub const LONGTERM_SIZE: usize = 45000;
@@ -106,11 +108,24 @@ impl Buffers {
         }
     }
 
+    /// Returns [`SampleCounter::get_counter`] wrapped to [`LONGTERM_SIZE`]
+    pub fn current_wrapped(&self) -> SampleCounter {
+        SampleCounter(self.current_sample.get_counter() % LONGTERM_SIZE) 
+    }
+    
     /// Insert a new sample at the head
     pub fn insert(&mut self, sample: u8) {
-        let new_head = self.current_sample.wrapping_counter_add(1, LONGTERM_SIZE);
+        let new_head = self.current_wrapped().wrapping_counter_add(1, LONGTERM_SIZE);
         self.longterm_buffer[new_head] = sample;
         self.current_sample.increment();
+        
+        // Comment out cfg to trace all samples
+        #[cfg(feature = "")]
+        if self.current_sample.get_counter() % 250 == 0 {
+            let first_sample = self.current_wrapped().wrapping_counter_sub(250, LONGTERM_SIZE);
+            let new_samples = self.longterm_buffer.get(first_sample..first_sample+250).unwrap();
+            trace!("Here are the last 250 samples:\n{}", new_samples)
+        }
     }
 
     /// Analyze the most recent data to determine if a contact event has occurred.
