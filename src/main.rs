@@ -12,6 +12,7 @@ use embedded_hal::pwm::SetDutyCycle;
 #[allow(unused_imports)]
 use panic_probe as _;
 use rp2040_hal::{
+    Adc,
     clocks::init_clocks_and_plls,
     dma,
     dma::{DMAExt, SingleChannel},
@@ -20,18 +21,19 @@ use rp2040_hal::{
     gpio::Pins,
     pac,
     prelude::*,
-    pwm::Slices,
-    Adc, Sio, Watchdog,
+    pwm::Slices, Sio, Watchdog,
 };
+use buffer::{Buffers, create_avg_buffer};
 
 use crate::{
-    components::{create_avg_buffer, Buffers, StatusLedMulti},
+    components::StatusLedMulti,
     interrupt::{READINGS_FIFO, STATUS_LEDS},
 };
 use crate::components::StatusLed;
 
 mod components;
 mod interrupt;
+mod buffer;
 
 /// Second-stage bootloader, from [rp2040-boot2](https://docs.rs/rp2040-boot2)
 #[link_section = ".boot2"]

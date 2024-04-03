@@ -7,11 +7,12 @@ use defmt::debug;
 use rp2040_hal::{
     adc::DmaReadTarget,
     dma,
-    dma::{single_buffer::Transfer, Channel, CH0},
+    dma::{CH0, Channel, single_buffer::Transfer},
     pac::interrupt,
 };
+use crate::buffer::Buffers;
 
-use crate::components::{Buffers, StatusLed, StatusLedMulti, StatusLedStates};
+use crate::components::{StatusLed, StatusLedMulti, StatusLedStates};
 
 /// Status LEDs for access in interrupts
 #[cfg(feature = "multi_status")]
