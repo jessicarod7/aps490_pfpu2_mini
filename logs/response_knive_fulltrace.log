@@ -1,0 +1,1430 @@
+[INFO ] main.rs:54         => Detection system startup
+[WARN ] main.rs:78         => Unable to downscale clock speed: CantIncreaseFreq
+Clocks will continue to run at 125000000
+[DEBUG] main.rs:93         => critical_section: init status LEDs
+[DEBUG] buffer.rs:105      => critical_section: init buffers
+[DEBUG] main.rs:138        => critical_section: transfer readings FIFO to mutex
+[INFO ] components.rs:76   => Resuming normal detection: System initialization complete
+[INFO ] components.rs:84   => Previous detection event cleared
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(5) // avg_high: 57 // avg_low: 57 // 20 samples: [55, 57, 5, 7, 60, 9, 9, 62, 48, 11, 63, 64, 13, 70, 65, 13, 14, 67, 6, 17]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(20) // avg_high: 57 // avg_low: 56 // 20 samples: [84, 28, 94, 80, 31, 28, 84, 28, 84, 22, 32, 86, 86, 31, 79, 84, 31, 31, 85, 40]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 1]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(19) // avg_high: 57 // avg_low: 57 // 20 samples: [83, 83, 30, 75, 82, 29, 31, 84, 84, 30, 84, 83, 29, 30, 83, 32, 31, 85, 84, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 30, 31, 85, 32, 32, 86, 70, 82, 86, 31, 98, 81, 33, 31, 86, 36, 35, 86, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [76, 84, 30, 30, 84, 38, 31, 84, 31, 86, 83, 30, 30, 83, 31, 31, 85, 84, 30, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 31, 84, 33, 31, 85, 85, 31, 85, 84, 31, 91, 83, 30, 31, 84, 20, 32, 85, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(94) // min: Some(20) // avg_high: 57 // avg_low: 57 // 20 samples: [92, 81, 29, 29, 82, 36, 30, 81, 31, 82, 83, 30, 31, 83, 28, 31, 84, 83, 31, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(20) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 32, 85, 31, 32, 86, 85, 32, 83, 83, 31, 46, 83, 31, 31, 84, 24, 33, 86, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(21) // avg_high: 58 // avg_low: 58 // 20 samples: [89, 82, 30, 31, 83, 21, 31, 84, 33, 78, 83, 33, 33, 83, 31, 33, 85, 84, 33, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(18) // avg_high: 58 // avg_low: 58 // 20 samples: [32, 33, 86, 31, 34, 87, 86, 33, 84, 84, 31, 31, 85, 33, 32, 85, 68, 32, 86, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 56 // avg_low: 56 // 20 samples: [48, 83, 31, 31, 84, 24, 32, 85, 32, 79, 81, 31, 31, 83, 39, 33, 83, 82, 31, 80]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 57 // avg_low: 56 // 20 samples: [33, 33, 83, 35, 34, 84, 84, 33, 82, 80, 31, 32, 82, 32, 32, 83, 82, 31, 81, 81]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(17) // avg_high: 56 // avg_low: 56 // 20 samples: [31, 82, 32, 32, 83, 66, 32, 82, 85, 30, 95, 83, 29, 30, 84, 33, 30, 85, 84, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 30, 30, 85, 37, 30, 86, 84, 29, 87, 85, 28, 29, 85, 29, 29, 86, 86, 28, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 56 // avg_low: 56 // 20 samples: [28, 29, 86, 29, 29, 86, 85, 29, 86, 85, 29, 90, 84, 27, 29, 85, 17, 30, 86, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [95, 85, 29, 29, 85, 33, 29, 86, 85, 29, 83, 84, 29, 30, 84, 27, 30, 85, 84, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(12) // avg_high: 56 // avg_low: 56 // 20 samples: [83, 28, 29, 84, 29, 30, 85, 84, 31, 83, 82, 30, 46, 82, 30, 30, 83, 23, 31, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 56 // avg_low: 56 // 20 samples: [30, 89, 82, 29, 30, 82, 18, 31, 82, 81, 31, 74, 80, 31, 31, 81, 33, 32, 82, 81]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(93) // min: Some(18) // avg_high: 55 // avg_low: 55 // 20 samples: [80, 81, 31, 31, 80, 29, 32, 82, 80, 32, 79, 79, 31, 33, 80, 33, 33, 81, 65, 33]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(19) // avg_high: 56 // avg_low: 56 // 20 samples: [79, 32, 47, 78, 32, 32, 79, 25, 34, 81, 80, 33, 78, 79, 32, 33, 79, 40, 33, 80]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(17) // avg_high: 56 // avg_low: 56 // 20 samples: [32, 73, 79, 32, 33, 80, 36, 33, 82, 81, 32, 82, 80, 32, 32, 81, 33, 33, 82, 81]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(18) // avg_high: 56 // avg_low: 56 // 20 samples: [80, 79, 31, 32, 80, 33, 33, 81, 26, 33, 81, 81, 33, 94, 79, 31, 32, 80, 32, 33]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(19) // avg_high: 57 // avg_low: 57 // 20 samples: [80, 32, 80, 80, 33, 33, 81, 38, 83, 82, 34, 82, 81, 33, 34, 81, 33, 35, 83, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [82, 81, 34, 34, 82, 34, 35, 82, 34, 81, 81, 33, 86, 80, 32, 32, 81, 20, 34, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(19) // avg_high: 57 // avg_low: 57 // 20 samples: [34, 95, 81, 32, 33, 82, 33, 34, 83, 83, 34, 80, 83, 34, 34, 83, 34, 35, 84, 83]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [81, 81, 32, 33, 82, 32, 33, 82, 82, 32, 81, 81, 31, 49, 81, 31, 31, 81, 26, 32]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(105) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [83, 32, 87, 82, 31, 33, 83, 20, 84, 84, 32, 79, 83, 31, 32, 84, 36, 33, 85, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [82, 84, 32, 32, 84, 32, 33, 84, 82, 30, 82, 82, 29, 30, 82, 31, 31, 83, 65, 31]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [83, 30, 49, 83, 31, 31, 83, 26, 85, 85, 31, 84, 84, 31, 31, 85, 36, 32, 85, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(14) // avg_high: 57 // avg_low: 57 // 20 samples: [78, 82, 30, 31, 83, 32, 31, 85, 32, 90, 82, 33, 32, 87, 28, 31, 81, 83, 28, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 32, 85, 33, 33, 85, 66, 33, 85, 85, 32, 95, 83, 32, 32, 84, 32, 33, 85, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(19) // avg_high: 56 // avg_low: 56 // 20 samples: [82, 82, 31, 31, 82, 36, 31, 83, 32, 82, 81, 31, 32, 82, 32, 32, 83, 82, 31, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(95) // min: Some(19) // avg_high: 57 // avg_low: 57 // 20 samples: [32, 33, 83, 33, 34, 84, 83, 33, 83, 83, 32, 90, 81, 31, 31, 81, 20, 33, 84, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [94, 81, 31, 31, 82, 32, 31, 82, 30, 83, 84, 29, 30, 84, 29, 31, 86, 85, 30, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 31, 85, 31, 31, 86, 85, 31, 84, 84, 29, 48, 84, 29, 29, 84, 22, 31, 86, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(15) // avg_high: 57 // avg_low: 56 // 20 samples: [91, 84, 29, 29, 84, 17, 31, 86, 29, 80, 84, 28, 30, 86, 31, 30, 86, 85, 29, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [29, 30, 86, 29, 30, 87, 86, 30, 84, 84, 28, 28, 85, 29, 29, 87, 67, 30, 86, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [49, 85, 28, 29, 85, 21, 30, 87, 29, 83, 85, 28, 29, 87, 34, 30, 87, 86, 29, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 1]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [28, 29, 85, 30, 30, 87, 86, 29, 86, 85, 28, 28, 86, 29, 29, 86, 85, 28, 85, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [29, 86, 29, 29, 87, 66, 29, 86, 86, 29, 97, 85, 28, 29, 86, 31, 30, 86, 85, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 28, 29, 85, 33, 29, 86, 85, 29, 86, 85, 28, 29, 85, 29, 29, 86, 85, 29, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 56 // 20 samples: [27, 29, 85, 29, 29, 86, 85, 29, 86, 86, 30, 93, 84, 27, 28, 86, 18, 31, 87, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(101) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [95, 84, 27, 28, 85, 31, 30, 86, 91, 28, 85, 83, 28, 26, 90, 29, 30, 87, 86, 25]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [85, 27, 29, 87, 28, 29, 87, 86, 0, 255, 255, 0, 94, 255, 0, 0, 255, 60, 0, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [0, 166, 255, 0, 0, 255, 0, 0, 255, 255, 0, 165, 255, 0, 0, 255, 0, 0, 255, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 255, 0, 0, 255, 20, 0, 255, 255, 60, 0, 255, 255, 0, 255, 255, 0, 0, 255, 18]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 255, 0, 247, 255, 0, 1, 255, 255, 0, 0, 255, 255, 0, 247, 255, 0, 1, 255, 3]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 254, 0, 255, 255, 0, 1, 255, 19, 0, 255, 255, 0, 255, 255, 0, 1, 255, 0, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [238, 0, 254, 255, 0, 1, 255, 0, 255, 3, 0, 255, 238, 0, 253, 255, 0, 1, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 235, 0, 255, 255, 0, 1, 255, 255, 0, 0, 255, 235, 0, 255, 255, 0, 1, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 234, 0, 255, 255, 0, 1, 255, 85, 28, 29, 86, 85, 28, 85, 85, 28, 29, 86, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 86, 29, 86, 85, 29, 30, 86, 49, 85, 30, 30, 85, 22, 32, 86, 85, 31, 96, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 1]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [28, 84, 18, 31, 85, 85, 30, 82, 84, 29, 29, 84, 31, 30, 85, 84, 29, 84, 84, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [85, 30, 31, 85, 85, 30, 85, 84, 30, 31, 86, 31, 31, 86, 66, 31, 86, 86, 31, 93]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [29, 29, 85, 20, 31, 86, 85, 30, 83, 85, 29, 30, 85, 34, 30, 86, 85, 29, 83, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(10) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 86, 32, 31, 87, 86, 30, 86, 85, 30, 31, 86, 31, 31, 87, 86, 30, 84, 84, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [86, 30, 31, 86, 67, 31, 86, 86, 31, 95, 84, 29, 29, 85, 31, 31, 85, 84, 30, 80]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 31, 86, 36, 31, 87, 85, 31, 85, 84, 29, 30, 85, 29, 30, 86, 85, 29, 84, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [29, 85, 30, 30, 85, 85, 29, 84, 29, 93, 84, 28, 29, 85, 18, 30, 86, 85, 29, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 30, 87, 32, 31, 87, 86, 30, 84, 84, 27, 29, 85, 28, 31, 86, 85, 28, 86, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [28, 85, 28, 29, 86, 85, 28, 85, 255, 0, 94, 255, 0, 0, 255, 60, 0, 255, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 0, 0, 255, 0, 0, 255, 255, 255, 0, 167, 255, 0, 0, 255, 0, 0, 255, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 0, 0, 255, 18, 0, 255, 254, 59, 0, 255, 255, 0, 255, 255, 0, 0, 255, 19, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 0, 247, 255, 0, 1, 255, 4, 255, 0, 0, 255, 255, 0, 249, 255, 0, 1, 255, 3]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 255, 0, 255, 255, 0, 1, 255, 19, 0, 255, 255, 0, 255, 255, 0, 1, 255, 0, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [238, 0, 254, 255, 0, 1, 255, 0, 255, 3, 0, 255, 238, 0, 254, 255, 0, 1, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 56 // 20 samples: [255, 236, 0, 255, 255, 0, 1, 255, 29, 86, 31, 31, 86, 85, 29, 86, 84, 28, 29, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 86, 85, 29, 85, 84, 28, 29, 29, 30, 85, 30, 30, 85, 65, 31, 86, 85, 30, 93]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(17) // avg_high: 57 // avg_low: 56 // 20 samples: [31, 31, 86, 21, 32, 87, 87, 31, 84, 30, 30, 85, 34, 31, 85, 84, 29, 83, 84, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 31, 30, 85, 84, 30, 85, 83, 30, 85, 31, 31, 85, 84, 30, 84, 85, 29, 47, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 85, 66, 31, 86, 85, 30, 93, 85, 28, 29, 86, 31, 30, 86, 85, 29, 81, 86, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 32, 28, 85, 84, 27, 82, 83, 28, 86, 28, 28, 87, 86, 28, 86, 85, 27, 28, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [29, 87, 87, 28, 86, 85, 27, 48, 0, 0, 255, 0, 0, 255, 255, 0, 247, 255, 0, 1]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [18, 0, 255, 254, 0, 255, 255, 0, 0, 1, 255, 18, 0, 255, 255, 0, 255, 255, 0, 1]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [4, 0, 255, 240, 0, 255, 255, 0, 28, 29, 87, 33, 29, 88, 87, 28, 86, 87, 27, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [30, 29, 88, 87, 28, 87, 85, 28, 84, 28, 28, 86, 29, 29, 87, 86, 28, 85, 85, 27]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(17) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 30, 30, 87, 66, 30, 87, 86, 31, 96, 85, 29, 30, 86, 32, 31, 86, 86, 30, 81]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [29, 29, 85, 34, 30, 85, 84, 29, 84, 84, 28, 29, 85, 29, 30, 86, 85, 29, 84, 84]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [29, 86, 30, 31, 87, 86, 29, 85, 0, 167, 255, 0, 0, 255, 0, 0, 255, 255, 0, 248]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 1, 255, 18, 0, 255, 254, 0, 28, 95, 85, 27, 27, 86, 30, 28, 86, 86, 27, 81]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [28, 29, 87, 33, 29, 87, 87, 29, 87, 29, 87, 87, 28, 29, 87, 29, 30, 88, 87, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [86, 28, 29, 86, 29, 29, 87, 86, 255, 255, 0, 164, 255, 0, 0, 255, 0, 0, 255, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 255, 0, 0, 255, 18, 0, 255, 88, 88, 29, 97, 87, 28, 28, 87, 31, 30, 88, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 121 // avg_low: 121 // 20 samples: [83, 85, 27, 28, 85, 32, 28, 88, 28, 88, 87, 27, 87, 86, 26, 27, 88, 28, 28, 88]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(14) // avg_high: 57 // avg_low: 57 // 20 samples: [28, 86, 85, 27, 28, 86, 28, 28, 86, 25, 29, 83, 17, 30, 88, 88, 30, 98, 86, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 16, 31, 85, 88, 26, 84, 84, 27, 28, 86, 30, 29, 86, 85, 27, 86, 85, 27, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 57 // avg_low: 56 // 20 samples: [28, 29, 87, 86, 28, 86, 85, 28, 27, 86, 28, 29, 87, 65, 29, 87, 86, 28, 93, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 72 // avg_low: 72 // 20 samples: [28, 88, 20, 30, 88, 87, 29, 97, 86, 26, 27, 87, 32, 28, 87, 86, 28, 86, 86, 26]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [255, 1, 0, 255, 238, 0, 255, 255, 0, 255, 255, 0, 94, 255, 0, 0, 255, 60, 0, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 164, 255, 0, 0, 255, 0, 0, 28, 87, 86, 27, 94, 84, 25, 26, 85, 15, 27, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(16) // avg_high: 56 // avg_low: 56 // 20 samples: [28, 97, 86, 27, 27, 87, 31, 28, 87, 33, 29, 87, 86, 28, 85, 86, 27, 28, 86, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 86, 28, 86, 84, 27, 28, 85, 28, 29, 86, 85, 28, 86, 85, 27, 48, 85, 27, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [65, 29, 87, 86, 28, 94, 85, 27, 0, 255, 16, 0, 255, 255, 0, 255, 255, 0, 1, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 255, 238, 0, 254, 255, 0, 1, 32, 28, 87, 85, 28, 85, 85, 27, 28, 86, 28, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 1]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(13) // avg_high: 57 // avg_low: 56 // 20 samples: [86, 28, 87, 85, 27, 28, 85, 28, 87, 29, 30, 87, 86, 29, 85, 85, 27, 49, 86, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [87, 65, 29, 87, 86, 28, 94, 85, 0, 0, 255, 9, 0, 255, 255, 0, 255, 255, 0, 1]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [4, 0, 255, 238, 0, 254, 255, 0, 28, 87, 32, 29, 87, 86, 29, 86, 86, 27, 28, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [28, 88, 86, 27, 87, 86, 27, 27, 0, 1, 255, 0, 0, 255, 237, 0, 255, 255, 0, 91]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 0, 255, 157, 0, 255, 255, 0, 28, 88, 29, 29, 88, 67, 29, 89, 88, 28, 95, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [27, 86, 18, 28, 88, 88, 27, 97, 255, 0, 247, 255, 0, 1, 255, 4, 0, 255, 238, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 0, 1, 255, 1, 0, 255, 236, 84, 88, 26, 27, 89, 28, 27, 89, 88, 26, 90, 88]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [26, 88, 26, 27, 89, 88, 26, 88, 26, 87, 87, 24, 25, 88, 27, 27, 89, 66, 26, 88]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(14) // avg_high: 57 // avg_low: 57 // 20 samples: [25, 47, 88, 26, 26, 89, 17, 28, 90, 89, 26, 85, 89, 26, 27, 90, 32, 28, 90, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [83, 88, 25, 26, 88, 27, 27, 89, 27, 87, 86, 26, 27, 88, 28, 28, 88, 87, 27, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [27, 28, 87, 29, 29, 88, 67, 29, 88, 88, 29, 98, 87, 28, 29, 88, 31, 30, 88, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 86, 28, 28, 87, 33, 29, 88, 87, 28, 87, 85, 27, 28, 86, 28, 29, 88, 86, 28]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(16) // avg_high: 57 // avg_low: 57 // 20 samples: [86, 28, 29, 87, 29, 30, 89, 88, 29, 88, 87, 28, 95, 86, 27, 28, 87, 17, 30, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [28, 96, 85, 26, 27, 86, 30, 28, 90, 89, 26, 88, 88, 25, 27, 89, 25, 26, 90, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [89, 88, 26, 27, 89, 28, 28, 90, 27, 87, 87, 27, 50, 88, 27, 27, 89, 18, 29, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 106 // avg_low: 105 // 20 samples: [27, 95, 87, 25, 26, 87, 16, 28, 255, 255, 0, 255, 255, 0, 1, 255, 1, 0, 255, 238]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [89, 89, 26, 26, 90, 26, 28, 92, 26, 84, 87, 25, 26, 89, 31, 27, 89, 88, 26, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 83 // avg_low: 82 // 20 samples: [26, 27, 89, 28, 26, 90, 89, 26, 255, 255, 0, 1, 255, 0, 0, 255, 255, 0, 255, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(15) // avg_high: 57 // avg_low: 57 // 20 samples: [26, 90, 27, 27, 90, 66, 27, 92, 89, 25, 83, 88, 25, 25, 89, 26, 26, 90, 89, 25]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [88, 25, 25, 90, 25, 26, 90, 89, 89, 89, 23, 24, 91, 26, 25, 91, 66, 26, 90, 90]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(12) // avg_high: 57 // avg_low: 57 // 20 samples: [48, 89, 26, 26, 91, 18, 27, 91, 89, 24, 85, 89, 25, 25, 89, 31, 26, 90, 89, 25]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(13) // avg_high: 57 // avg_low: 56 // 20 samples: [88, 24, 25, 89, 26, 26, 91, 90, 24, 90, 89, 24, 25, 90, 26, 26, 91, 90, 24, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(101) // min: Some(13) // avg_high: 57 // avg_low: 57 // 20 samples: [24, 24, 90, 25, 25, 91, 66, 26, 90, 90, 24, 99, 89, 24, 24, 90, 29, 25, 90, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(101) // min: Some(11) // avg_high: 57 // avg_low: 57 // 20 samples: [85, 89, 23, 24, 91, 30, 26, 91, 91, 24, 91, 90, 24, 25, 91, 25, 25, 91, 91, 24]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [89, 24, 24, 90, 25, 25, 91, 91, 0, 255, 255, 0, 167, 255, 0, 0, 255, 0, 0, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 56 // 20 samples: [0, 255, 255, 0, 0, 255, 19, 0, 25, 92, 91, 23, 100, 91, 23, 24, 91, 29, 25, 92]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 123 // avg_low: 122 // 20 samples: [24, 85, 90, 23, 23, 91, 30, 24, 92, 24, 23, 92, 92, 22, 92, 90, 21, 22, 92, 23]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 234, 0, 255, 255, 0, 1, 255, 24, 93, 92, 24, 91, 91, 23, 23, 91, 25, 24, 92]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [23, 89, 89, 22, 23, 91, 24, 24, 0, 0, 255, 60, 0, 255, 255, 0, 255, 255, 0, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 0, 255, 255, 0, 249, 255, 0, 22, 22, 92, 14, 24, 93, 92, 23, 86, 91, 23, 23]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [28, 23, 92, 91, 22, 85, 90, 22, 254, 255, 0, 1, 255, 0, 0, 255, 234, 0, 255, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [1, 255, 0, 0, 255, 234, 0, 255, 23, 23, 92, 24, 24, 93, 92, 23, 91, 91, 23, 23]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [24, 24, 92, 91, 22, 90, 91, 22, 255, 0, 167, 255, 0, 0, 255, 0, 0, 255, 255, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 0, 0, 255, 20, 0, 255, 254, 93, 24, 100, 91, 24, 24, 91, 30, 25, 93, 93, 24]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [91, 23, 26, 91, 29, 27, 91, 92, 255, 234, 0, 255, 255, 0, 1, 255, 0, 0, 255, 234]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 255, 0, 1, 255, 0, 0, 255, 92, 24, 91, 91, 24, 23, 92, 25, 25, 93, 93, 24]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [90, 22, 23, 91, 24, 23, 92, 67, 250, 58, 2, 255, 255, 1, 255, 255, 0, 1, 255, 17]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [255, 255, 0, 249, 255, 0, 1, 255, 93, 92, 24, 87, 93, 24, 25, 92, 30, 25, 93, 92]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 126 // avg_low: 125 // 20 samples: [85, 91, 22, 23, 91, 24, 24, 92, 0, 255, 234, 0, 255, 255, 0, 1, 255, 0, 0, 255]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(255) // min: Some(0) // avg_high: 57 // avg_low: 57 // 20 samples: [0, 255, 255, 0, 1, 255, 0, 0, 91, 90, 22, 89, 90, 22, 23, 91, 24, 24, 92, 66]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 1]
+[TRACE] interrupt.rs:140   => max: Some(99) // min: Some(12) // avg_high: 56 // avg_low: 56 // 20 samples: [90, 90, 22, 47, 90, 23, 23, 91, 23, 23, 88, 13, 25, 89, 88, 24, 83, 88, 24, 24]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 3]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(13) // avg_high: 57 // avg_low: 56 // 20 samples: [29, 26, 90, 90, 25, 83, 89, 25, 26, 88, 26, 27, 88, 88, 26, 87, 87, 26, 27, 88]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(12) // avg_high: 56 // avg_low: 56 // 20 samples: [27, 88, 88, 26, 87, 86, 25, 26, 27, 27, 88, 26, 28, 89, 88, 27, 99, 86, 26, 27]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(102) // min: Some(11) // avg_high: 57 // avg_low: 57 // 20 samples: [14, 29, 90, 89, 28, 87, 88, 27, 24, 89, 28, 26, 89, 88, 24, 88, 87, 24, 25, 89]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(189) // min: Some(0) // avg_high: 72 // avg_low: 72 // 20 samples: [26, 90, 89, 25, 90, 89, 25, 25, 87, 29, 29, 88, 64, 29, 87, 87, 28, 86, 85, 27]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(206) // min: Some(0) // avg_high: 98 // avg_low: 98 // 20 samples: [188, 66, 0, 186, 188, 0, 178, 188, 201, 0, 199, 204, 0, 0, 204, 0, 0, 203, 202, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(191) // min: Some(0) // avg_high: 83 // avg_low: 82 // 20 samples: [190, 0, 0, 191, 0, 0, 190, 142, 0, 0, 144, 0, 0, 143, 144, 0, 140, 144, 0, 0]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(213) // min: Some(0) // avg_high: 101 // avg_low: 101 // 20 samples: [0, 0, 184, 185, 0, 181, 185, 0, 0, 210, 0, 0, 210, 213, 0, 197, 212, 0, 0, 211]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 2]
+[TRACE] interrupt.rs:140   => max: Some(194) // min: Some(0) // avg_high: 56 // avg_low: 56 // 20 samples: [0, 193, 194, 0, 187, 193, 0, 0, 89, 25, 88, 88, 24, 49, 89, 25, 24, 89, 25, 26]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(184) // min: Some(0) // avg_high: 88 // avg_low: 88 // 20 samples: [89, 25, 87, 88, 23, 24, 89, 11, 0, 182, 3, 0, 181, 182, 0, 175, 180, 0, 0, 184]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(176) // min: Some(0) // avg_high: 57 // avg_low: 56 // 20 samples: [0, 175, 176, 0, 169, 175, 0, 0, 25, 87, 88, 25, 25, 89, 12, 26, 90, 90, 26, 87]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 1]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(14) // avg_high: 57 // avg_low: 57 // 20 samples: [24, 25, 88, 26, 26, 88, 88, 25, 87, 86, 29, 83, 85, 28, 29, 86, 29, 30, 87, 86]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(96) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 84, 27, 28, 85, 28, 29, 85, 84, 33, 83, 83, 33, 52, 82, 33, 33, 83, 30, 34]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(97) // min: Some(18) // avg_high: 57 // avg_low: 57 // 20 samples: [82, 32, 84, 81, 32, 32, 82, 19, 33, 82, 82, 32, 78, 80, 32, 32, 82, 35, 33, 83]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(98) // min: Some(14) // avg_high: 56 // avg_low: 56 // 20 samples: [31, 79, 82, 31, 32, 82, 32, 32, 85, 83, 31, 83, 83, 30, 31, 84, 31, 31, 84, 60]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 3]
+[TRACE] interrupt.rs:140   => max: Some(102) // min: Some(10) // avg_high: 57 // avg_low: 57 // 20 samples: [83, 83, 29, 54, 82, 29, 29, 83, 12, 30, 86, 86, 29, 84, 85, 28, 29, 86, 34, 29]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 3]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(7) // avg_high: 56 // avg_low: 56 // 20 samples: [84, 29, 78, 84, 28, 29, 85, 31, 33, 82, 81, 32, 82, 80, 31, 32, 82, 32, 33, 82]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [2, 0]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(12) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 81, 80, 31, 31, 81, 33, 32, 82, 19, 32, 83, 83, 31, 98, 81, 31, 31, 82, 36]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(100) // min: Some(12) // avg_high: 57 // avg_low: 57 // 20 samples: [84, 84, 32, 77, 83, 32, 32, 83, 25, 31, 88, 87, 30, 89, 86, 29, 30, 86, 33, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [0, 2]
+[TRACE] interrupt.rs:140   => max: Some(103) // min: Some(8) // avg_high: 57 // avg_low: 57 // 20 samples: [86, 29, 83, 86, 29, 29, 87, 31, 87, 56, 29, 82, 86, 31, 92, 80, 27, 30, 89, 16]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 0]
+[TRACE] interrupt.rs:140   => max: Some(102) // min: Some(9) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 88, 29, 96, 87, 27, 29, 87, 26, 30, 88, 88, 29, 93, 87, 28, 30, 88, 35, 30]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
+[TRACE] interrupt.rs:140   => max: Some(104) // min: Some(9) // avg_high: 57 // avg_low: 57 // 20 samples: [87, 27, 80, 86, 28, 29, 87, 29, 29, 86, 85, 29, 83, 85, 28, 60, 85, 28, 28, 85]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [1, 0]
+[TRACE] interrupt.rs:140   => max: Some(107) // min: Some(8) // avg_high: 57 // avg_low: 57 // 20 samples: [31, 87, 87, 29, 102, 86, 28, 29, 51, 29, 84, 90, 28, 93, 83, 30, 29, 87, 26, 31]
+-> all_unique samples: 0
+[DEBUG] interrupt.rs:154   => critical_section: dma update and check longterm buffers
+[DEBUG] interrupt.rs:158   => critical_section: match status for correct buffer logic
+[DEBUG] buffer.rs:143      => Checking for contact
+[DEBUG] interrupt.rs:169   => exit buffer critical section
+[DEBUG] interrupt.rs:173   => critical_section: start new DMA transfer
+[DEBUG] interrupt.rs:115   => critical_section: DMA take readings
+[TRACE] interrupt.rs:85    => high indices (mod 4): [3, 2]
