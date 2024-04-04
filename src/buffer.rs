@@ -86,7 +86,8 @@ impl Buffers {
     /// decreased by approximately 1.65V. Current values are based on experimental data and account
     /// for signal drift.
     const INIT_TRIGGER_DELTA: i16 = 2;
-    /// Initial averaged difference to restore [`StatusLedStates::Normal`].
+    /// Initial averaged difference to restore
+    /// [`StatusLedStates::Normal`](crate::components::StatusLedStates::Normal).
     ///
     /// This is the increase in voltage relative to the last detection event. Current values are
     /// based on experimental data and account for signal drift.
@@ -173,7 +174,7 @@ impl Buffers {
 
     /// Analyze the most recent data and contact events to determine when contact ends
     ///
-    /// A detection [`StatusLedStates::Alert`] will not clear until at least 150 samples (300 milliseconds with 2 ms
+    /// A detection [`StatusLedStates::Alert`](crate::components::StatusLedStates::Alert) will not clear until at least 150 samples (300 milliseconds with 2 ms
     /// averaging) have been recorded. This ensures the operator will see the LED light up.
     pub fn detect_end_contact(&mut self) -> bool {
         debug!("Checking for end of contact");
@@ -216,7 +217,7 @@ impl Buffers {
 
     /// Shortcut to return index of a successful detection sample.
     ///
-    ///```
+    ///```rust
     /// static BUFFERS = Buffers::init();
     ///
     /// BUFFERS.insert(12);

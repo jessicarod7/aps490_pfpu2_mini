@@ -20,7 +20,7 @@ use crate::{
 use crate::buffer::DetectionMsg;
 
 /// Status LEDs for access in interrupts
-#[cfg(feature = "multi_status")]
+#[cfg(any(doc, feature = "multi_status"))]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
 

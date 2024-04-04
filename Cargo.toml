@@ -32,6 +32,9 @@ trace_avg_samples = []
 # Enables trace messages for every averaged sample
 trace_indiv_samples= []
 
+[package.metadata.docs.rs]
+rustc-args = ["--cfg", "doc_cfg"]
+
 # cargo build/run
 [profile.dev]
 codegen-units = 1

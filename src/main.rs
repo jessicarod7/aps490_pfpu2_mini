@@ -2,8 +2,8 @@
 //! for an autopsy saw.
 #![no_std]
 #![no_main]
-#![doc(html_playground_url = "https://play.rust-lang.org/")]
 #![warn(missing_docs)]
+#![cfg_attr(doc_cfg, feature(doc_cfg), feature(doc_auto_cfg), feature(doc_cfg_hide))]
 
 use buffer::{create_avg_buffer, Buffers};
 use defmt::{debug, info, warn};
