@@ -17,6 +17,7 @@ use crate::{
     buffer::Buffers,
     components::{StatusLed, StatusLedMulti, StatusLedStates},
 };
+use crate::buffer::DetectionMsg;
 
 /// Status LEDs for access in interrupts
 #[cfg(feature = "multi_status")]
@@ -150,6 +151,8 @@ fn DMA_IRQ_0() {
         let sample_avg = avgs.get_delta();
 
         // Determine if enough low sample events have occurred
+        let mut contact_detected = false;
+        let mut reset_detected = false;
         critical_section::with(|cs| {
             debug!("critical_section: dma update and check longterm buffers");
             let buffers = BUFFERS.take(cs).expect(Buffers::NO_BUFFER_PANIC_MSG);
@@ -159,8 +162,12 @@ fn DMA_IRQ_0() {
             let status_leds = STATUS_LEDS.borrow_ref(cs);
             if status_leds.is_some() {
                 match status_leds.as_ref().unwrap().state {
-                    StatusLedStates::Normal => buffers.detect_contact(),
-                    StatusLedStates::Alert => buffers.detect_end_contact(),
+                    StatusLedStates::Normal => if buffers.detect_contact() {
+                        contact_detected = true
+                    },
+                    StatusLedStates::Alert => if buffers.detect_end_contact() {
+                        reset_detected = true
+                    },
                     StatusLedStates::Error | StatusLedStates::Disabled => {}
                 }
             }
@@ -168,6 +175,19 @@ fn DMA_IRQ_0() {
             BUFFERS.replace(cs, Some(buffers));
             debug!("exit buffer critical section");
         });
+        if contact_detected {
+            critical_section::with(|cs| {
+                #[cfg(feature = "multi_status")]
+                let buffers = BUFFERS.take(cs).unwrap();
+                StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(buffers)));
+                BUFFERS.replace(cs, Some(buffers));
+            });
+        } else if reset_detected {
+            critical_section::with(|cs| {
+                #[cfg(feature = "multi_status")]
+                StatusLedMulti::set_normal(cs, None)
+            })
+        }
 
         let new_dma_transfer = dma::single_buffer::Config::new(dma_ch, dma_from, avg_buffer);
         debug!("critical_section: start new DMA transfer");

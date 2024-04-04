@@ -83,12 +83,14 @@ impl Buffers {
     /// Initial averaged difference used for detecting contact.
     ///
     /// Ex. a trigger delta of 128 on a 3.3V signal requires that the average voltage range has
-    /// decreased by approximately 1.65V.
-    const INIT_TRIGGER_DELTA: u8 = 160;
+    /// decreased by approximately 1.65V. Current values are based on experimental data and account
+    /// for signal drift.
+    const INIT_TRIGGER_DELTA: i16 = 2;
     /// Initial averaged difference to restore [`StatusLedStates::Normal`].
     ///
-    /// This is the increase in voltage relative to the last detection event.
-    const INIT_RESTORE_DELTA: u8 = 100;
+    /// This is the increase in voltage relative to the last detection event. Current values are
+    /// based on experimental data and account for signal drift.
+    const INIT_RESTORE_DELTA: i16 = 2;
     /// Panic message raised if buffers are not available
     pub const NO_BUFFER_PANIC_MSG: &'static str =
         "Buffers have not been initialized or are not currently available in mutex";
@@ -132,78 +134,84 @@ impl Buffers {
                 .longterm_buffer
                 .get(first_sample..first_sample + 250)
                 .unwrap();
-            trace!("Here are the last 250 samples:\n{=[u8]:b}", new_samples)
+            trace!("Here are the last 250 samples:\n{=[u8]}", new_samples)
         }
     }
 
     /// Analyze the most recent data to determine if a contact event has occurred.
     ///
     /// Also updates the record of recent detection events
-    pub fn detect_contact(&mut self) {
+    pub fn detect_contact(&mut self) -> bool {
         debug!("Checking for contact");
         if !self.await_confirm {
             // First contact check
             let prev_sample = self.current_sample.wrapping_counter_sub(1, LONGTERM_SIZE);
-            if self.longterm_buffer[prev_sample].saturating_sub(self.longterm_buffer[self.current_sample.get_counter()])
-                >= Self::INIT_TRIGGER_DELTA
+            if i16::abs(
+                self.longterm_buffer[prev_sample] as i16
+                    - self.longterm_buffer[self.current_sample.get_counter()] as i16,
+            ) >= Self::INIT_TRIGGER_DELTA
             {
                 self.await_confirm = true;
             }
+            return false;
         } else {
             // Validation contact check
+            self.await_confirm = false; // Always reset on validation check
             let prev_high_sample = self.current_sample.wrapping_counter_sub(2, LONGTERM_SIZE);
-            if self.longterm_buffer[prev_high_sample].saturating_sub(self.longterm_buffer[self.current_sample.get_counter()])
-                >= Self::INIT_TRIGGER_DELTA
+            if i16::abs(
+                self.longterm_buffer[prev_high_sample] as i16
+                    - self.longterm_buffer[self.current_sample.get_counter()] as i16,
+            ) >= 1
             {
                 // Contact detected!
-                critical_section::with(|cs| {
-                    #[cfg(feature = "multi_status")]
-                    StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(self)))
-                });
                 self.add_detection_event();
+                return true;
             }
-
-            // Always reset on validation check
-            self.await_confirm = false;
         }
+        false
     }
 
     /// Analyze the most recent data and contact events to determine when contact ends
     ///
     /// A detection [`StatusLedStates::Alert`] will not clear until at least 150 samples (300 milliseconds with 2 ms
     /// averaging) have been recorded. This ensures the operator will see the LED light up.
-    pub fn detect_end_contact(&mut self) {
+    pub fn detect_end_contact(&mut self) -> bool {
         debug!("Checking for end of contact");
         if let Some(last_detection) = self.detection_events[0] {
             if self
                 .current_sample
                 .wrapping_counter_sub(last_detection.0.get_counter(), LONGTERM_SIZE)
-                >= 300
+                >= 150
             {
-                if !self.await_confirm
-                    && self.longterm_buffer[self.current_sample.get_counter()].saturating_sub(last_detection.1)
-                        >= Self::INIT_RESTORE_DELTA
-                {
-                    // First clear check
-                    self.await_confirm = true;
-                }
-            } else if self.await_confirm {
-                // Validation clear check
-                if self.longterm_buffer[self.current_sample.get_counter()].saturating_sub(last_detection.1)
-                    >= Self::INIT_RESTORE_DELTA
+                self.await_confirm = false;
+                return true;
+            } else if !self.await_confirm
+                && i16::abs(
+                    self.longterm_buffer[self.current_sample.get_counter()] as i16
+                        - last_detection.1 as i16,
+                ) >= Self::INIT_RESTORE_DELTA
+            {
+                // First clear check
+                self.await_confirm = true;
+            }
+            return false;
+        } else if self.await_confirm {
+            // Validation clear check
+            self.await_confirm = false;
+            if let Some(last_detection) = self.detection_events[0] {
+                if i16::abs(
+                    self.longterm_buffer[self.current_sample.get_counter()] as i16
+                        - last_detection.1 as i16,
+                ) >= 1
                 {
                     // Contact cleared!
-                    critical_section::with(|cs| {
-                        #[cfg(feature = "multi_status")]
-                        StatusLedMulti::set_normal(cs, None)
-                    })
+                    return true;
                 }
-
-                self.await_confirm = false;
             }
         } else {
             warn!("End contact detection was called before any detection events have occurred.");
         }
+        false
     }
 
     /// Shortcut to return index of a successful detection sample.
@@ -235,7 +243,7 @@ impl DetectionMsg {
     /// Create a detection message:
     ///
     /// > "contact detected on sample {[`Buffers::detection_idx`]}! Adding to detection events"`
-    fn create(buffer: &Buffers) -> Self {
+    pub(crate) fn create(buffer: &Buffers) -> Self {
         Self(SampleCounter(buffer.detection_idx()))
     }
 }

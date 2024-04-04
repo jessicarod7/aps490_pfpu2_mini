@@ -75,7 +75,7 @@ impl StatusLed for StatusLedMulti {
         if let Some(detection_msg) = message {
             info!("Resuming normal detection: {}", detection_msg);
         } else {
-            error!("State changed to normal for unknown reason!");
+            warn!("State changed to normal");
         }
 
         match status.state {

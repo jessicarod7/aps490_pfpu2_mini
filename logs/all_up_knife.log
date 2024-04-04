@@ -1,0 +1,8 @@
+[INFO ] main.rs:54         => Detection system startup
+[WARN ] main.rs:78         => Unable to downscale clock speed: CantIncreaseFreq
+Clocks will continue to run at 125000000
+[INFO ] components.rs:76   => Resuming normal detection: System initialization complete
+[INFO ] components.rs:84   => Previous detection event cleared
+[INFO ] components.rs:97   => contact detected on sample 990! Adding to detection events
+[WARN ] components.rs:78   => State changed to normal
+[INFO ] components.rs:84   => Previous detection event cleared
