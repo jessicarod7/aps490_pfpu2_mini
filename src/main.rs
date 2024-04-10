@@ -3,9 +3,15 @@
 #![no_std]
 #![no_main]
 #![warn(missing_docs)]
-#![cfg_attr(doc_cfg, feature(doc_cfg), feature(doc_auto_cfg), feature(doc_cfg_hide))]
+#![cfg_attr(
+    doc_cfg,
+    feature(doc_cfg),
+    feature(doc_auto_cfg),
+    feature(doc_cfg_hide)
+)]
 
 use buffer::{create_avg_buffer, Buffers};
+use cortex_m::peripheral::syst::SystClkSource;
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
 use defmt_rtt as _;
@@ -27,7 +33,7 @@ use rp2040_hal::{
 
 use crate::{
     components::{StatusLed, StatusLedMulti},
-    interrupt::{READINGS_FIFO, STATUS_LEDS},
+    interrupt::{DISABLE_SWITCH, READINGS_FIFO, SIGNAL_GEN, STATUS_LEDS},
 };
 
 mod buffer;
@@ -53,7 +59,7 @@ fn main() -> ! {
 
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
-    let _core = pac::CorePeripherals::take().unwrap();
+    let core = pac::CorePeripherals::take().unwrap();
     let mut watchdog = Watchdog::new(pac.WATCHDOG);
     let sio = Sio::new(pac.SIO);
 
@@ -110,6 +116,8 @@ fn main() -> ! {
     let mut signal_gen = pwm_slices.pwm3.channel_a;
     signal_gen.output_to(pins.gpio22);
     signal_gen.set_duty_cycle_percent(50).unwrap();
+    debug!("critical_section: transfer PWM control to mutex");
+    critical_section::with(|cs| SIGNAL_GEN.replace(cs, Some(signal_gen)));
 
     // Setup ADC pins, DMA, buffers
     let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);
@@ -138,6 +146,18 @@ fn main() -> ! {
     debug!("critical_section: transfer readings FIFO to mutex");
     critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer.start())));
     readings_fifo.resume();
+
+    // Configure and enable SysTick for disable switch
+    let disable_switch = pins.gpio9.into_pull_down_input();
+    disable_switch.set_schmitt_enabled(true); // Debouncing
+    debug!("critical_section: init disable switch");
+    critical_section::with(|cs| DISABLE_SWITCH.replace(cs, Some(disable_switch)));
+
+    let mut syst = core.SYST;
+    syst.set_clock_source(SystClkSource::Core); // 1 us per tick
+    syst.set_reload(20_000);
+    syst.clear_current();
+    syst.enable_interrupt();
 
     // Begin normal system operation
     critical_section::with(|cs| {

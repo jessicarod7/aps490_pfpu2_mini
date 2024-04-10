@@ -20,6 +20,7 @@ panic-probe = { version = "0.3", features = ["print-defmt"] }
 
 rp2040-hal = { version = "0.10", features = ["rt", "critical-section-impl", "defmt"] }
 rp2040-boot2 = "0.3"
+log = "0.4.21"
 
 [features]
 default = ["multi_status"]
