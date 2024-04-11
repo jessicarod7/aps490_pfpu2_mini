@@ -54,8 +54,8 @@ pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 /// Main operation loop
 #[entry]
 fn main() -> ! {
-    #[cfg(all(feature = "multi_status", feature = "rgba_status"))]
-    panic!("Please select one LED status feature: `multi_status` or `rgba_status`");
+    // #[cfg(all(feature = "multi_status", feature = "rgba_status"))]
+    // panic!("Please select one LED status feature: `multi_status` or `rgba_status`");
 
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();

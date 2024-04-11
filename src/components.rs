@@ -65,7 +65,7 @@ pub struct StatusLedMulti {
     pub state: StatusLedStates,
     /// Typically green
     normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
-    /// Typically yellow
+    /// Typically yellow, but controls the blue led when `rgba_status` is enabled
     alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
     /// Typically red
     error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
@@ -95,8 +95,14 @@ impl StatusLed for StatusLedMulti {
 
         match status.state {
             StatusLedStates::Alert => {
+                #[cfg(not(feature = "rgba_status"))]
                 status.alert_led.set_low().unwrap();
-                info!("Previous detection event cleared")
+                #[cfg(feature = "rgba_status")]
+                {
+                    status.normal_led.set_low().unwrap();
+                    status.error_led.set_low().unwrap();
+                }
+                info!("Previous detection event cleared");
             }
             StatusLedStates::Error => {
                 status.error_led.set_low().unwrap();
@@ -127,7 +133,13 @@ impl StatusLed for StatusLedMulti {
             StatusLedStates::Disabled => Self::resume_detection(cs),
             StatusLedStates::Alert => {}
         };
+        #[cfg(not(feature = "rgba_status"))]
         status.alert_led.set_high().unwrap();
+        #[cfg(feature = "rgba_status")]
+        {
+            status.normal_led.set_high().unwrap();
+            status.error_led.set_high().unwrap();
+        }
         status.state = StatusLedStates::Alert;
         STATUS_LEDS.replace(cs, Some(status));
     }
@@ -153,7 +165,14 @@ impl StatusLed for StatusLedMulti {
                 Self::pause_detection(cs);
             }
             StatusLedStates::Alert => {
+                #[cfg(not(feature = "rgba_status"))]
                 status.alert_led.set_low().unwrap();
+                #[cfg(feature = "rgba_status")]
+                {
+                    status.normal_led.set_low().unwrap();
+                    status.error_led.set_low().unwrap();
+                }
+                info!("Previous detection event cleared");
                 Self::pause_detection(cs);
             }
             StatusLedStates::Error | StatusLedStates::Disabled => {}
@@ -181,7 +200,14 @@ impl StatusLed for StatusLedMulti {
                 Self::pause_detection(cs);
             }
             StatusLedStates::Alert => {
+                #[cfg(not(feature = "rgba_status"))]
                 status.alert_led.set_low().unwrap();
+                #[cfg(feature = "rgba_status")]
+                {
+                    status.normal_led.set_low().unwrap();
+                    status.error_led.set_low().unwrap();
+                }
+                info!("Previous detection event cleared");
                 Self::pause_detection(cs);
             }
             StatusLedStates::Error => status.error_led.set_low().unwrap(),

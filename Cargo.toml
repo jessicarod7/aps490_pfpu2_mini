@@ -27,7 +27,7 @@ default = ["multi_status"]
 # Controls three separate status LEDs
 multi_status = []
 # Controls a single, common-anode RGB LED
-rgba_status = []
+rgba_status = ["multi_status"]
 # Enables trace messages for all averages
 trace_avg_samples = []
 # Enables trace messages for every averaged sample
