@@ -23,7 +23,7 @@ rp2040-boot2 = "0.3"
 log = "0.4.21"
 
 [features]
-default = ["multi_status"]
+default = ["rgba_status"]
 # Controls three separate status LEDs
 multi_status = []
 # Controls a single, common-anode RGB LED
@@ -32,6 +32,8 @@ rgba_status = ["multi_status"]
 trace_avg_samples = []
 # Enables trace messages for every averaged sample
 trace_indiv_samples= []
+# Enables disable switch functionality
+disable = []
 
 [package.metadata.docs.rs]
 rustc-args = ["--cfg", "doc_cfg"]

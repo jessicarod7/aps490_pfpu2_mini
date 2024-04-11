@@ -157,6 +157,7 @@ fn main() -> ! {
     syst.set_clock_source(SystClkSource::Core); // 1 us per tick
     syst.set_reload(20_000);
     syst.clear_current();
+    #[cfg(feature = "disable")]
     syst.enable_interrupt();
 
     // Begin normal system operation
