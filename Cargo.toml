@@ -1,10 +1,13 @@
 [package]
 name = "aps490_mini"
 version = "0.2.0"
-description = "FSM for saw MCU"
+authors = ["Cameron Rodriguez <dev@camrod.me", "PFPU2 team (Zainab Ali, Olivia Lotzer, Cameron Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
+categories = ["embedded", "no-std", "science"]
+description = "Control software for PFPU2 automated brain detection system"
 edition = "2021"
-license = "GPL-2.0-only"
+keywords = ["capstone", "RP2040", "autopsy", "brain", "contact-detection"]
 license = "Apache-2.0"
+readme = "README.md"
 repository = "https://github.com/cam-rod/aps490_mini"
 
 [package.metadata.docs.rs]
