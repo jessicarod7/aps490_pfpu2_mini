@@ -25,16 +25,19 @@ use crate::{
     components::{StatusLed, StatusLedMulti, StatusLedStates},
 };
 
+/// Wrapper for [DMA `Transfer`](Transfer)
+pub type ReadingsDma = Transfer<Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]>;
+/// Wrapper for [`DISABLE_SWITCH`]
+pub type DisableSwitch = Pin<Gpio9, FunctionSio<SioInput>, PullDown>;
+/// Wrapper for [`SIGNAL_GEN`]
+pub type SignalPwm = pwm::Channel<Slice<Pwm3, FreeRunning>, pwm::A>;
+/// Wrapper for [`SIGNAL_CONF`]
+pub type SignalGenConfig = (Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]);
+
 /// Status LEDs for access in interrupts
 #[cfg(any(doc, feature = "led_status"))]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
-
-/// Wrapper for [DMA `Transfer`](Transfer)
-pub type ReadingsDma = Transfer<Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]>;
-pub type DisableSwitch = Pin<Gpio9, FunctionSio<SioInput>, PullDown>;
-pub type SignalPwm = pwm::Channel<Slice<Pwm3, FreeRunning>, pwm::A>;
-pub type SignalGenConfig = (Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]);
 
 ///  access in interrupts
 pub static READINGS_FIFO: Mutex<RefCell<Option<ReadingsDma>>> = Mutex::new(RefCell::new(None));
@@ -52,8 +55,10 @@ pub static BUFFERS: Mutex<RefCell<Option<&'static mut Buffers>>> = Mutex::new(Re
 pub static DISABLE_SWITCH: Mutex<RefCell<Option<DisableSwitch>>> = Mutex::new(RefCell::new(None));
 
 /// Calculates proper averages aligned with signal timing
-struct AlignedAverages {
+pub struct AlignedAverages {
+    /// The average voltage from the "higher" 2000 measurements
     avg_high: i32,
+    /// The average voltage from the "lower" 2000 measurements
     avg_low: i32,
 }
 
@@ -64,7 +69,9 @@ impl AlignedAverages {
     /// Sorting requires an allocator, so this implementation identifies the highest partial sums.
     /// Although this implementation technically allows for non-adjacent partial sums to be matched,
     /// in effect this has little impact as those scenarios result in low overall deltas.
-    fn align_signal_timing(partial_sums: &[i32; 4]) -> Self {
+    ///
+    /// This would be a good section to rewrite :)
+    pub fn align_signal_timing(partial_sums: &[i32; 4]) -> Self {
         let mut avg_high_idx = [4usize; 2];
         let mut avg_high = 0i32;
 
@@ -100,9 +107,7 @@ impl AlignedAverages {
         avg_high += match_sum.1;
         avg_high /= 2000;
         #[cfg(feature = "trace_indiv_samples")]
-        {
-            trace!("high indices (mod 4): {}", avg_high_idx);
-        }
+        Self::trace_high_index(&avg_high_idx);
 
         let avg_low = partial_sums
             .iter()
@@ -118,6 +123,12 @@ impl AlignedAverages {
             / 2000;
 
         Self { avg_low, avg_high }
+    }
+
+    /// Records the two highest measurements from the first four of a 2 ms sample.
+    #[cfg(any(doc, feature = "trace_indiv_samples"))]
+    pub fn trace_high_index(avg_high_idx: &[usize; 2]) {
+        trace!("high indices (mod 4): {}", avg_high_idx);
     }
 
     /// Calculates the average range of the sample interval
@@ -151,24 +162,10 @@ fn DMA_IRQ_0() {
         let avgs = AlignedAverages::align_signal_timing(&partial_sums);
 
         #[cfg(feature = "trace_indiv_samples")]
-        {
-            let unique_samples = avg_buffer.iter().fold([None; 256], |mut acc, s| {
-                acc[*s as usize] = Some(s);
-                acc
-            });
-            trace!(
-                "max: {} // min: {} // avg_high: {} // avg_low: {} // 20 samples: {}\n-> all_unique samples: {}",
-                avg_buffer.iter().max(),
-                avg_buffer.iter().min(),
-                avgs.avg_high,
-                avgs.avg_low,
-                avg_buffer.get(0..20).unwrap(),
-                /*unique_samples*/ 0
-            );
-        }
-        let sample_avg = avgs.get_delta();
+        trace_indiv_samples(avg_buffer, &avgs);
 
         // Determine if enough low sample events have occurred
+        let sample_avg = avgs.get_delta();
         let mut contact_detected = false;
         let mut reset_detected = false;
         critical_section::with(|cs| {
@@ -225,6 +222,37 @@ fn DMA_IRQ_0() {
             )
         });
     }
+}
+
+/// Records the following information about a 2 ms sample (note all measurements are 8 bits on a 3.3 V signal):
+/// - Maximum voltage recorded
+/// - Minimum voltage recorded
+/// - Average voltage from higher half
+/// - Average voltage from lower half
+/// - The first 20 measurements
+/// - All unique measurements seen
+///
+/// Example of a trace:
+///
+/// ```
+/// [TRACE] interrupt.rs:59    => max: Some(255) // min: Some(0) // avg1: 127 // avg2: 127
+/// -> all_unique samples: [Some(0), Some(1), Some(2), Some(3), None, None, None, None, None, None, None, None, None, None, None, None, Some(16), Some(17), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(95), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(140), Some(141), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(231), Some(232), Some(233), Some(234), Some(235), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(253), Some(254), Some(255)]
+/// ```
+#[cfg(any(doc, feature = "trace_indiv_samples"))]
+pub fn trace_indiv_samples(avg_buffer: &[u8; 4000], avgs: &AlignedAverages) {
+    let unique_samples = avg_buffer.iter().fold([None; 256], |mut acc, s| {
+        acc[*s as usize] = Some(s);
+        acc
+    });
+    trace!(
+                "max: {} // min: {} // avg_high: {} // avg_low: {} // 20 samples: {}\n-> all_unique samples: {}",
+                avg_buffer.iter().max(),
+                avg_buffer.iter().min(),
+                avgs.avg_high,
+                avgs.avg_low,
+                avg_buffer.get(0..20).unwrap(),
+                unique_samples
+            );
 }
 
 /// ISR for SysTick, used for checking [`DisableSwitch`]

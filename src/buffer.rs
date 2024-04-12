@@ -1,3 +1,4 @@
+//! Buffers for recording data from the ADC, and tracking long-term averages from the detection system.
 
 // SPDX-License-Identifier: Apache-2.0
 
@@ -19,9 +20,9 @@ pub const LONGTERM_SIZE: usize = 45000;
 /// Index of a detection event, combined with voltage difference
 pub type DetectionEvent = (SampleCounter, u8);
 
-/// Monotonic counter indicating the position of averaged samples.
+/// Monotonic counter indicating the position of averaged samples in the buffer
 #[derive(Default, Debug, Ord, PartialOrd, Eq, PartialEq, Copy, Clone)]
-pub struct SampleCounter(usize);
+pub struct SampleCounter(pub usize);
 
 impl SampleCounter {
     /// Get current counter value
@@ -30,7 +31,7 @@ impl SampleCounter {
     }
 
     /// Increment counter (mainly used by [`Buffers.current_sample`](Buffers)). An error will be
-    /// raised if any counter reaches [`u32::MAX`].
+    /// raised if any counter reaches [`usize::MAX`].
     pub fn increment(&mut self) {
         match self.0.checked_add(1) {
             None => critical_section::with(|cs| {
@@ -99,7 +100,7 @@ impl Buffers {
     pub const NO_BUFFER_PANIC_MSG: &'static str =
         "Buffers have not been initialized or are not currently available in mutex";
 
-    /// Initialize [`BUFFERS`]
+    /// Initialize [`BUFFERS`] with a [`singleton`]
     pub fn init() {
         match singleton!(:Buffers = Self {
             longterm_buffer: [0u8; LONGTERM_SIZE],
@@ -128,18 +129,23 @@ impl Buffers {
         self.longterm_buffer[new_head] = sample;
         self.current_sample.increment();
 
-        // Comment out cfg to trace all samples
         #[cfg(feature = "trace_avg_samples")]
         if self.current_sample.get_counter() % 250 == 0 {
-            let first_sample = self
-                .current_wrapped()
-                .wrapping_counter_sub(250, LONGTERM_SIZE);
-            let new_samples = self
-                .longterm_buffer
-                .get(first_sample..first_sample + 250)
-                .unwrap();
-            trace!("Here are the last 250 samples:\n{=[u8]}", new_samples)
+            self.trace_avg_samples();
         }
+    }
+
+    /// Log average voltage samples for debugging
+    #[cfg(any(doc, feature = "trace_avg_samples"))]
+    pub fn trace_avg_samples(&self) {
+        let first_sample = self
+            .current_wrapped()
+            .wrapping_counter_sub(250, LONGTERM_SIZE);
+        let new_samples = self
+            .longterm_buffer
+            .get(first_sample..first_sample + 250)
+            .unwrap();
+        trace!("Here are the last 250 samples:\n{=[u8]}", new_samples)
     }
 
     /// Analyze the most recent data to determine if a contact event has occurred.
@@ -241,13 +247,13 @@ impl Buffers {
 }
 
 /// Newtype to send formatted error messages when [`Buffers::detect_contact`] is successful.
-pub struct DetectionMsg(SampleCounter);
+pub struct DetectionMsg(pub SampleCounter);
 
 impl DetectionMsg {
     /// Create a detection message:
     ///
     /// > "contact detected on sample {[`Buffers::detection_idx`]}! Adding to detection events"`
-    pub(crate) fn create(buffer: &Buffers) -> Self {
+    pub fn create(buffer: &Buffers) -> Self {
         Self(SampleCounter(buffer.detection_idx()))
     }
 }
@@ -262,7 +268,7 @@ impl Format for DetectionMsg {
     }
 }
 
-/// Creates a buffer for ADC DMA transfers
+/// Creates a [`singleton`] buffer for ADC DMA transfers
 pub fn create_avg_buffer() -> Option<&'static mut [u8; 4000]> {
     singleton!(: [u8; 4000] = [0u8; 4000])
 }

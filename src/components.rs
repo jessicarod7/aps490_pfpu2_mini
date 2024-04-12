@@ -1,4 +1,4 @@
-//! Basic component structs
+//! Configuration for system state and status LED control
 
 // SPDX-License-Identifier: Apache-2.0
 
@@ -20,7 +20,7 @@ use crate::{
     interrupt::{READINGS_FIFO, SIGNAL_CONF, SIGNAL_GEN, STATUS_LEDS},
 };
 
-/// All states for LEDs
+/// System states, expressed by LEDs colours
 pub enum StatusLedStates {
     /// Green
     Normal,
@@ -56,7 +56,7 @@ pub trait StatusLed {
     fn set_error(cs: CriticalSection, message: Option<&str>);
     /// Set [`StatusLedStates::Disabled`] within a [`CriticalSection`]
     fn set_disabled(cs: CriticalSection, message: Option<&str>);
-    /// Pause signal generation, readings, and interrupts when disabled or error raised.
+    /// Pause signal generation, readings, and interrupts when disabled or error raised
     fn pause_detection(cs: CriticalSection);
     /// Resume components with normal operation
     fn resume_detection(cs: CriticalSection);
@@ -67,11 +67,11 @@ pub struct StatusLedMulti {
     /// Current LED state
     pub state: StatusLedStates,
     /// Typically green
-    normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
-    /// Typically yellow, but controls the blue led when `rgba_status` is enabled
-    alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
+    pub normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
+    /// Typically yellow, but controls the blue LED when `rgba_status` is enabled
+    pub alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
     /// Typically red
-    error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
+    pub error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
 }
 
 impl StatusLed for StatusLedMulti {

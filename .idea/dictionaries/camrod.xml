@@ -1,9 +1,13 @@
 <component name="ProjectDictionaryState">
   <dictionary name="camrod">
     <words>
+      <w>avgs</w>
+      <w>indiv</w>
       <w>ksamples</w>
       <w>leds</w>
       <w>longterm</w>
+      <w>sysclk</w>
+      <w>syst</w>
       <w>xosc</w>
     </words>
   </dictionary>

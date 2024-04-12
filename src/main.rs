@@ -1,19 +1,27 @@
-//! Provides contact detection with a high-conductivity surface (such as brain tissue)
-//! for an autopsy saw.
+//! This [RP2040](rp2040_hal) project provides contact detection with a highly-conductivity/highly-capacitive surface (such as brain tissue)
+//! for an autopsy saw. For more information, check out [the repo](https://github.com/cam-rod/aps490_mini).
+//!
+//! ## Crate features
+//!
+//! - `led_status`: Enables the use of 3 LEDs to provide system status. This is the main user interface
+//!   for the tool, and is enabled by default.
+//! - `rgba_status`: Enables the trio of lights to be replaced by a single common-anode RGB LED.
+//!   This is the design which appears in
+//!   [our schematic](https://github.com/cam-rod/aps490_retraction_fsm/blob/hardware/aps490_detection/aps490_detection-schematic.pdf).
+//! - `trace_avg_samples`: Logs the average voltage difference measured, 250 samples at a time. See [`Buffers::trace_avg_samples`].
+//! - `trace_indiv_samples` Logs information on every sample recorded. Very noisy! See
+//!   [`interrupt::AlignedAverages::trace_high_index`] and [`interrupt::trace_indiv_samples`]
+//! - `disable_switch`: Starts the SysTick timer to check the disable switch status. Never tested this
+//!   feature, and I'm pretty sure my implementation will cause the system to panic due to poor synchronization.
+//!   This functionality should be redesigned before enabling the feature.
 
 // SPDX-License-Identifier: Apache-2.0
 
 #![no_std]
 #![no_main]
 #![warn(missing_docs)]
-#![cfg_attr(
-    doc_cfg,
-    feature(doc_cfg),
-    feature(doc_auto_cfg),
-    feature(doc_cfg_hide)
-)]
+#![cfg_attr(docsrs, feature(doc_cfg), feature(doc_auto_cfg), feature(doc_cfg_hide))]
 
-use buffer::{create_avg_buffer, Buffers};
 use cortex_m::peripheral::syst::SystClkSource;
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
@@ -35,6 +43,7 @@ use rp2040_hal::{
 };
 
 use crate::{
+    buffer::{create_avg_buffer, Buffers},
     components::{StatusLed, StatusLedMulti},
     interrupt::{DISABLE_SWITCH, READINGS_FIFO, SIGNAL_GEN, STATUS_LEDS},
 };
@@ -50,7 +59,7 @@ pub static BOOT2: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
 /// External high-speed crystal on the pico board is 12Mhz
 pub const XOSC_FREQ_HZ: u32 = 12_000_000;
 /// Attempt to run system clock at 24 MHz
-pub const SYS_CLOCK_FREQ: u32 = 24_000_000;
+const SYS_CLOCK_FREQ: u32 = 24_000_000;
 /// Frequency of detection signal is 100 kHz
 pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 
