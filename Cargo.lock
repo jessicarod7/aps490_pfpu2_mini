@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "aps490_mini"
+name = "aps490_pfpu2_mini"
 version = "0.3.0"
 dependencies = [
  "cortex-m",

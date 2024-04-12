@@ -1,14 +1,15 @@
 [package]
-name = "aps490_mini"
+name = "aps490_pfpu2_mini"
 version = "0.3.0"
 authors = ["Cameron Rodriguez <dev@camrod.me", "PFPU2 team (Zainab Ali, Olivia Lotzer, Cameron Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
 categories = ["embedded", "no-std", "science"]
 description = "Control software for PFPU2 automated brain detection system"
+documentation = "https://docs.rs/aps490_pfpu2_mini"
 edition = "2021"
 keywords = ["capstone", "RP2040", "autopsy", "brain", "contact-detection"]
 license = "Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/cam-rod/aps490_mini"
+repository = "https://github.com/cam-rod/aps490_pfpu2_mini"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -42,7 +43,7 @@ trace_avg_samples = []
 trace_indiv_samples = []
 
 [[bin]]
-name = "aps490_mini"
+name = "aps490_pfpu2_mini"
 bench = false
 test = false
 

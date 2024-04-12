@@ -4,7 +4,7 @@
 
 use cortex_m::{prelude::_embedded_hal_PwmPin, singleton};
 use critical_section::CriticalSection;
-use defmt::{debug, error, info, warn};
+use defmt::{debug, error, Format, Formatter, info, warn};
 use embedded_hal::digital::{OutputPin, PinState};
 use rp2040_hal::{
     dma,
@@ -21,6 +21,7 @@ use crate::{
 };
 
 /// System states, expressed by LEDs colours
+#[derive(Copy, Clone, Debug, Hash, Ord, PartialOrd, Eq, PartialEq)]
 pub enum StatusLedStates {
     /// Green
     Normal,
@@ -30,6 +31,17 @@ pub enum StatusLedStates {
     Error,
     /// None illuminated
     Disabled,
+}
+
+impl Format for StatusLedStates {
+    fn format(&self, fmt: Formatter) {
+        defmt::write!(fmt, "{}", match self {
+            StatusLedStates::Normal => "Normal",
+            StatusLedStates::Alert => "Alert",
+            StatusLedStates::Error => "Error",
+            StatusLedStates::Disabled => "Disabled",
+        });
+    }
 }
 
 /// System status is communicated via a trio of LED colours (see [`StatusLedStates`]).
@@ -75,6 +87,7 @@ pub trait LedControl {
 }
 
 /// Controls the status LEDs on separate pins
+#[derive(Copy, Clone, Debug, Hash, Ord, PartialOrd, Eq, PartialEq, Format)]
 pub struct StatusLedBase<C>
 where
     C: LedControl,

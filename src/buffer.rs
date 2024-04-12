@@ -25,7 +25,7 @@ pub const LONGTERM_SIZE: usize = 45000;
 pub type DetectionEvent = (SampleCounter, u8);
 
 /// Monotonic counter indicating the position of averaged samples in the buffer
-#[derive(Default, Debug, Ord, PartialOrd, Eq, PartialEq, Copy, Clone)]
+#[derive(Copy, Clone, Default, Debug, Hash, Ord, PartialOrd, Eq, PartialEq, Format)]
 pub struct SampleCounter(pub usize);
 
 impl SampleCounter {
@@ -79,6 +79,7 @@ impl SampleCounter {
 }
 
 /// Various buffers used for managing signal samples
+#[derive(Copy, Clone, Debug, Hash, Ord, PartialOrd, Eq, PartialEq, Format)]
 pub struct Buffers {
     /// Records samples for long-term and adaptive detection.
     longterm_buffer: [u8; LONGTERM_SIZE],
@@ -256,6 +257,7 @@ impl Buffers {
 }
 
 /// Newtype to send formatted error messages when [`Buffers::detect_contact`] is successful.
+#[derive(Copy, Clone, Debug, Default, Hash, Ord, PartialOrd, Eq, PartialEq)]
 pub struct DetectionMsg(pub SampleCounter);
 
 impl DetectionMsg {
@@ -272,7 +274,7 @@ impl Format for DetectionMsg {
         defmt::write!(
             fmt,
             "contact detected on sample {}! Adding to detection events",
-            self.0.get_counter()
+            self.0
         )
     }
 }

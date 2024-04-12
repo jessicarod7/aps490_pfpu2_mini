@@ -1,5 +1,5 @@
 //! This [RP2040](rp2040_hal) project provides contact detection with a highly-conductivity/highly-capacitive surface (such as brain tissue)
-//! for an autopsy saw. For more information, check out [the repo](https://github.com/cam-rod/aps490_mini).
+//! for an autopsy saw. For more information, check out [the repo](https://github.com/cam-rod/aps490_pfpu2_mini).
 //!
 //! ## Crate features
 //!
@@ -72,7 +72,7 @@ pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 #[entry]
 fn main() -> ! {
     #[cfg(all(feature = "triple_status", feature = "rgba_status"))]
-    compile_error!("Features `triple_status` and `rgba_status` cannot be enabled at the same time in crate aps490_mini");
+    compile_error!("Features `triple_status` and `rgba_status` cannot be enabled at the same time in crate aps490_pfpu2_mini");
     
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();

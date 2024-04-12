@@ -6,7 +6,7 @@ use core::{cell::RefCell, cmp::Ordering};
 
 use cortex_m_rt::exception;
 use critical_section::Mutex;
-use defmt::debug;
+use defmt::{debug, Format};
 #[allow(unused_imports)]
 use defmt::trace;
 use embedded_hal::digital::InputPin;
@@ -63,6 +63,7 @@ pub static BUFFERS: Mutex<RefCell<Option<&'static mut Buffers>>> = Mutex::new(Re
 pub static DISABLE_SWITCH: Mutex<RefCell<Option<DisableSwitch>>> = Mutex::new(RefCell::new(None));
 
 /// Calculates proper averages aligned with signal timing
+#[derive(Copy, Clone, Debug, Default, Hash, Ord, PartialOrd, Eq, PartialEq, Format)]
 pub struct AlignedAverages {
     /// The average voltage from the "higher" 2000 measurements
     avg_high: i32,
