@@ -20,9 +20,13 @@ use rp2040_hal::{
     pwm::{FreeRunning, Pwm3, Slice},
 };
 
+#[cfg(feature = "rgba_status")]
+use crate::components::Rgba;
+#[cfg(feature = "triple_status")]
+use crate::components::Triple;
 use crate::{
     buffer::{Buffers, DetectionMsg},
-    components::{StatusLed, StatusLedMulti, StatusLedStates},
+    components::{StatusLed, StatusLedBase, StatusLedStates},
 };
 
 /// Wrapper for [DMA `Transfer`](Transfer)
@@ -34,9 +38,13 @@ pub type SignalPwm = pwm::Channel<Slice<Pwm3, FreeRunning>, pwm::A>;
 /// Wrapper for [`SIGNAL_CONF`]
 pub type SignalGenConfig = (Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4000]);
 
-/// Status LEDs for access in interrupts
-#[cfg(any(doc, feature = "led_status"))]
-pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
+/// Status LEDs for access in interrupts. Implementation for feature `rgba_status`.
+#[cfg(feature = "rgba_status")]
+pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedBase<Rgba>>>> =
+    Mutex::new(RefCell::new(None));
+/// Status LEDs for access in interrupts. There is a nearly identical mplementation for feature `rgba_status`, which does not appear here.
+#[cfg(any(doc, feature = "triple_status"))]
+pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedBase<Triple>>>> =
     Mutex::new(RefCell::new(None));
 
 ///  access in interrupts
@@ -196,15 +204,19 @@ fn DMA_IRQ_0() {
         });
         if contact_detected {
             critical_section::with(|cs| {
-                #[cfg(feature = "led_status")]
                 let buffers = BUFFERS.take(cs).unwrap();
-                StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(buffers)));
+                #[cfg(feature = "rgba_status")]
+                StatusLedBase::<Rgba>::set_alert(cs, Some(DetectionMsg::create(buffers)));
+                #[cfg(feature = "triple_status")]
+                StatusLedBase::<Triple>::set_alert(cs, Some(DetectionMsg::create(buffers)));
                 BUFFERS.replace(cs, Some(buffers));
             });
         } else if reset_detected {
             critical_section::with(|cs| {
-                #[cfg(feature = "led_status")]
-                StatusLedMulti::set_normal(cs, None)
+                #[cfg(feature = "rgba_status")]
+                StatusLedBase::<Rgba>::set_normal(cs, None);
+                #[cfg(feature = "triple_status")]
+                StatusLedBase::<Triple>::set_normal(cs, None);
             })
         }
 
@@ -215,11 +227,16 @@ fn DMA_IRQ_0() {
         // Report error if FIFO is not active
         critical_section::with(|cs| {
             debug!("critical_section: dma set_error for no active FIFO");
-            #[cfg(feature = "led_status")]
-            StatusLedMulti::set_error(
+            #[cfg(feature = "rgba_status")]
+            StatusLedBase::<Rgba>::set_error(
                 cs,
                 Some("No ADC transfer in progress! Unable to collect latest readings"),
-            )
+            );
+            #[cfg(feature = "triple_status")]
+            StatusLedBase::<Triple>::set_error(
+                cs,
+                Some("No ADC transfer in progress! Unable to collect latest readings"),
+            );
         });
     }
 }
@@ -275,14 +292,18 @@ fn SysTick() {
         {
             critical_section::with(|cs| {
                 debug!("critical_section: system disabled by switch");
-                #[cfg(feature = "led_status")]
-                StatusLedMulti::set_disabled(cs, Some("System disabled by switch."))
+                #[cfg(feature = "rgba_status")]
+                StatusLedBase::<Rgba>::set_disabled(cs, Some("System disabled by switch."));
+                #[cfg(feature = "triple_status")]
+                StatusLedBase::<Triple>::set_disabled(cs, Some("System disabled by switch."));
             });
         } else if switch.is_low().unwrap() {
             critical_section::with(|cs| {
                 debug!("critical_section: system disabled by switch");
-                #[cfg(feature = "led_status")]
-                StatusLedMulti::set_normal(cs, Some("System disabled by switch."))
+                #[cfg(feature = "rgba_status")]
+                StatusLedBase::<Rgba>::set_normal(cs, Some("System disabled by switch."));
+                #[cfg(feature = "triple_status")]
+                StatusLedBase::<Triple>::set_normal(cs, Some("System disabled by switch."));
             });
         }
     }

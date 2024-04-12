@@ -3,10 +3,9 @@
 //!
 //! ## Crate features
 //!
-//! - `led_status`: Enables the use of 3 LEDs to provide system status. This is the main user interface
+//! - `triple_status`: Enables the use of 3 LEDs to provide system status. This is the main user interface
 //!   for the tool, and is enabled by default.
-//! - `rgba_status`: Enables the trio of lights to be replaced by a single common-anode RGB LED.
-//!   This is the design which appears in
+//! - `rgba_status`: Alternate configuration which uses a single common-anode RGB LED. This is the design which appears in
 //!   [our schematic](https://github.com/cam-rod/aps490_retraction_fsm/blob/hardware/aps490_detection/aps490_detection-schematic.pdf).
 //! - `trace_avg_samples`: Logs the average voltage difference measured, 250 samples at a time. See [`Buffers::trace_avg_samples`].
 //! - `trace_indiv_samples` Logs information on every sample recorded. Very noisy! See
@@ -14,6 +13,8 @@
 //! - `disable_switch`: Starts the SysTick timer to check the disable switch status. Never tested this
 //!   feature, and I'm pretty sure my implementation will cause the system to panic due to poor synchronization.
 //!   This functionality should be redesigned before enabling the feature.
+//! 
+//! <div class="warning">Features `triple_status` and `rgba_status` are mutually exclusive.</div>
 
 // SPDX-License-Identifier: Apache-2.0
 
@@ -42,9 +43,13 @@ use rp2040_hal::{
     Adc, Sio, Watchdog,
 };
 
+#[cfg(feature = "rgba_status")]
+use crate::components::Rgba;
+#[cfg(feature = "triple_status")]
+use crate::components::Triple;
 use crate::{
     buffer::{create_avg_buffer, Buffers},
-    components::{StatusLed, StatusLedMulti},
+    components::{LedControl, StatusLed, StatusLedBase},
     interrupt::{DISABLE_SWITCH, READINGS_FIFO, SIGNAL_GEN, STATUS_LEDS},
 };
 
@@ -66,6 +71,9 @@ pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 /// Main operation loop
 #[entry]
 fn main() -> ! {
+    #[cfg(all(feature = "triple_status", feature = "rgba_status"))]
+    compile_error!("Features `triple_status` and `rgba_status` cannot be enabled at the same time in crate aps490_mini");
+    
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
     let core = pac::CorePeripherals::take().unwrap();
@@ -107,8 +115,10 @@ fn main() -> ! {
     // Setup status LEDs
     debug!("critical_section: init status LEDs");
     critical_section::with(|cs| {
-        #[cfg(feature = "led_status")]
-        STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8))
+        #[cfg(feature = "rgba_status")]
+        STATUS_LEDS.replace(cs, Rgba::init(pins.gpio6, pins.gpio7, pins.gpio8));
+        #[cfg(feature = "triple_status")]
+        STATUS_LEDS.replace(cs, Triple::init(pins.gpio6, pins.gpio7, pins.gpio8));
     });
 
     // Initialize and start signal generator
@@ -171,7 +181,10 @@ fn main() -> ! {
 
     // Begin normal system operation
     critical_section::with(|cs| {
-        StatusLedMulti::set_normal(cs, Some("System initialization complete"))
+        #[cfg(feature = "rgba_status")]
+        StatusLedBase::<Rgba>::set_normal(cs, Some("System initialization complete"));
+        #[cfg(feature = "triple_status")]
+        StatusLedBase::<Triple>::set_normal(cs, Some("System initialization complete"));
     });
     unsafe { pac::NVIC::unmask(pac::Interrupt::DMA_IRQ_0) }
     loop {

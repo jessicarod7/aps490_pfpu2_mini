@@ -1,6 +1,6 @@
 [package]
 name = "aps490_mini"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Cameron Rodriguez <dev@camrod.me", "PFPU2 team (Zainab Ali, Olivia Lotzer, Cameron Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
 categories = ["embedded", "no-std", "science"]
 description = "Control software for PFPU2 automated brain detection system"
@@ -28,17 +28,18 @@ log = "0.4.21"
 
 
 [features]
-default = ["led_status"]
-# Controls three separate status LEDs
-led_status = []
+default = ["triple_status"]
 # Controls a single, common-anode RGB LED
-rgba_status = ["led_status"]
+rgba_status = []
+# Controls three separate status LEDs
+triple_status = []
+# Enables disable switch functionality
+disable_switch = []
+
 # Enables trace messages for all averages
 trace_avg_samples = []
 # Enables trace messages for every averaged sample
 trace_indiv_samples = []
-# Enables disable switch functionality
-disable_switch = []
 
 [[bin]]
 name = "aps490_mini"

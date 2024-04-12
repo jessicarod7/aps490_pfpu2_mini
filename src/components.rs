@@ -42,12 +42,6 @@ pub trait StatusLed {
     /// Message displayed if system enters [`StatusLedStates::Disabled`]
     const DISABLE_MSG: &'static str = "\nToggle the disable switch to resume normal operation.";
 
-    /// Initialize LEDs
-    fn init(
-        normal_led: Pin<Gpio6, FunctionNull, PullDown>,
-        alert_led: Pin<Gpio7, FunctionNull, PullDown>,
-        error_led: Pin<Gpio8, FunctionNull, PullDown>,
-    ) -> Option<&'static mut Self>;
     /// Set [`StatusLedStates::Normal`] within a [`CriticalSection`]
     fn set_normal(cs: CriticalSection, message: Option<&str>);
     /// Set [`StatusLedStates::Alert`] within a [`CriticalSection`]
@@ -62,32 +56,36 @@ pub trait StatusLed {
     fn resume_detection(cs: CriticalSection);
 }
 
-/// Controls the status LEDs on separate pins. Intended for operation with three separate LEDs
-pub struct StatusLedMulti {
-    /// Current LED state
-    pub state: StatusLedStates,
-    /// Typically green
-    pub normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
-    /// Typically yellow, but controls the blue LED when `rgba_status` is enabled
-    pub alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
-    /// Typically red
-    pub error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
+/// Directly controls the LEDs.
+pub trait LedControl {
+    /// Initialize LEDs
+    fn init(
+        gpio6: Pin<Gpio6, FunctionNull, PullDown>,
+        gpio7: Pin<Gpio7, FunctionNull, PullDown>,
+        gpio8: Pin<Gpio8, FunctionNull, PullDown>,
+    ) -> Option<&'static mut impl StatusLed>;
+    /// Set the LEDs to match the current state. Any internal state should also be set.
+    ///
+    /// Returns `new_state` for convenience.
+    fn set_led(
+        &mut self,
+        old_state: &StatusLedStates,
+        new_state: StatusLedStates,
+    ) -> StatusLedStates;
 }
 
-impl StatusLed for StatusLedMulti {
-    fn init(
-        normal_led: Pin<Gpio6, FunctionNull, PullDown>,
-        alert_led: Pin<Gpio7, FunctionNull, PullDown>,
-        error_led: Pin<Gpio8, FunctionNull, PullDown>,
-    ) -> Option<&'static mut Self> {
-        singleton!(: StatusLedMulti = Self {
-            state: StatusLedStates::Alert,
-            normal_led: normal_led.into_push_pull_output_in_state(PinState::Low),
-            alert_led: alert_led.into_push_pull_output_in_state(PinState::High),
-            error_led: error_led.into_push_pull_output_in_state(PinState::Low),
-        })
-    }
+/// Controls the status LEDs on separate pins
+pub struct StatusLedBase<C>
+where
+    C: LedControl,
+{
+    /// Current LED state
+    pub state: StatusLedStates,
+    /// Controller for lights
+    pub ctrl: C,
+}
 
+impl<C: LedControl> StatusLed for StatusLedBase<C> {
     fn set_normal(cs: CriticalSection, message: Option<&str>) {
         let status = STATUS_LEDS.take(cs).expect(Self::NO_LED_PANIC_MSG);
         if let Some(detection_msg) = message {
@@ -97,25 +95,10 @@ impl StatusLed for StatusLedMulti {
         }
 
         match status.state {
-            StatusLedStates::Alert => {
-                #[cfg(not(feature = "rgba_status"))]
-                status.alert_led.set_low().unwrap();
-                #[cfg(feature = "rgba_status")]
-                {
-                    status.normal_led.set_low().unwrap();
-                    status.error_led.set_low().unwrap();
-                }
-                info!("Previous detection event cleared");
-            }
-            StatusLedStates::Error => {
-                status.error_led.set_low().unwrap();
-                Self::resume_detection(cs);
-            }
-            StatusLedStates::Disabled => Self::resume_detection(cs),
-            StatusLedStates::Normal => {}
-        };
-        status.normal_led.set_high().unwrap();
-        status.state = StatusLedStates::Normal;
+            StatusLedStates::Error | StatusLedStates::Disabled => Self::resume_detection(cs),
+            StatusLedStates::Normal | StatusLedStates::Alert => {}
+        }
+        status.state = status.ctrl.set_led(&status.state, StatusLedStates::Normal);
         STATUS_LEDS.replace(cs, Some(status));
     }
 
@@ -128,22 +111,10 @@ impl StatusLed for StatusLedMulti {
         }
 
         match status.state {
-            StatusLedStates::Normal => status.normal_led.set_low().unwrap(),
-            StatusLedStates::Error => {
-                status.error_led.set_low().unwrap();
-                Self::resume_detection(cs);
-            }
-            StatusLedStates::Disabled => Self::resume_detection(cs),
-            StatusLedStates::Alert => {}
+            StatusLedStates::Error | StatusLedStates::Disabled => Self::resume_detection(cs),
+            StatusLedStates::Normal | StatusLedStates::Alert => {}
         };
-        #[cfg(not(feature = "rgba_status"))]
-        status.alert_led.set_high().unwrap();
-        #[cfg(feature = "rgba_status")]
-        {
-            status.normal_led.set_high().unwrap();
-            status.error_led.set_high().unwrap();
-        }
-        status.state = StatusLedStates::Alert;
+        status.state = status.ctrl.set_led(&status.state, StatusLedStates::Alert);
         STATUS_LEDS.replace(cs, Some(status));
     }
 
@@ -163,25 +134,10 @@ impl StatusLed for StatusLedMulti {
         }
 
         match status.state {
-            StatusLedStates::Normal => {
-                status.normal_led.set_low().unwrap();
-                Self::pause_detection(cs);
-            }
-            StatusLedStates::Alert => {
-                #[cfg(not(feature = "rgba_status"))]
-                status.alert_led.set_low().unwrap();
-                #[cfg(feature = "rgba_status")]
-                {
-                    status.normal_led.set_low().unwrap();
-                    status.error_led.set_low().unwrap();
-                }
-                info!("Previous detection event cleared");
-                Self::pause_detection(cs);
-            }
+            StatusLedStates::Normal | StatusLedStates::Alert => Self::pause_detection(cs),
             StatusLedStates::Error | StatusLedStates::Disabled => {}
         };
-        status.error_led.set_high().unwrap();
-        status.state = StatusLedStates::Error;
+        status.state = status.ctrl.set_led(&status.state, StatusLedStates::Error);
         STATUS_LEDS.replace(cs, Some(status));
     }
 
@@ -198,25 +154,12 @@ impl StatusLed for StatusLedMulti {
         }
 
         match status.state {
-            StatusLedStates::Normal => {
-                status.normal_led.set_low().unwrap();
-                Self::pause_detection(cs);
-            }
-            StatusLedStates::Alert => {
-                #[cfg(not(feature = "rgba_status"))]
-                status.alert_led.set_low().unwrap();
-                #[cfg(feature = "rgba_status")]
-                {
-                    status.normal_led.set_low().unwrap();
-                    status.error_led.set_low().unwrap();
-                }
-                info!("Previous detection event cleared");
-                Self::pause_detection(cs);
-            }
-            StatusLedStates::Error => status.error_led.set_low().unwrap(),
-            StatusLedStates::Disabled => {}
+            StatusLedStates::Normal | StatusLedStates::Alert => Self::pause_detection(cs),
+            StatusLedStates::Error | StatusLedStates::Disabled => {}
         };
-        status.state = StatusLedStates::Disabled;
+        status.state = status
+            .ctrl
+            .set_led(&status.state, StatusLedStates::Disabled);
         STATUS_LEDS.replace(cs, Some(status));
     }
 
@@ -247,5 +190,116 @@ impl StatusLed for StatusLedMulti {
             warn!("Failed to restore FIFO config");
             READINGS_FIFO.replace(cs, None);
         }
+    }
+}
+
+/// Common anode RGB, mapped as follows:
+/// - [`Gpio6`] is the red control
+/// - [`Gpio7`] is the green control
+/// - [`Gpio8`] is the blue control (initialized high but otherwise unused)
+#[cfg(any(doc, feature = "rgba_status"))]
+pub struct Rgba {
+    /// Used in [`StatusLedStates::Alert`] and [`StatusLedStates::Error`]
+    red_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
+    /// Used in [`StatusLedStates::Normal`] and [`StatusLedStates::Error`]
+    green_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
+    /// Initialized but unused
+    #[allow(dead_code)]
+    blue_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
+}
+
+#[cfg(any(doc, feature = "rgba_status"))]
+impl LedControl for Rgba {
+    fn init(
+        gpio6: Pin<Gpio6, FunctionNull, PullDown>,
+        gpio7: Pin<Gpio7, FunctionNull, PullDown>,
+        gpio8: Pin<Gpio8, FunctionNull, PullDown>,
+    ) -> Option<&'static mut StatusLedBase<Rgba>> {
+        singleton!(: StatusLedBase<Rgba> = StatusLedBase {
+            state: StatusLedStates::Alert,
+            ctrl: Rgba {
+                red_led: gpio6.into_push_pull_output_in_state(PinState::Low),
+                green_led: gpio7.into_push_pull_output_in_state(PinState::Low),
+                blue_led: gpio8.into_push_pull_output_in_state(PinState::High),
+            }
+        })
+    }
+
+    fn set_led(
+        &mut self,
+        old_state: &StatusLedStates,
+        new_state: StatusLedStates,
+    ) -> StatusLedStates {
+        match old_state {
+            StatusLedStates::Normal => self.green_led.set_high().unwrap(),
+            StatusLedStates::Alert => {
+                self.red_led.set_high().unwrap();
+                self.green_led.set_high().unwrap();
+            }
+            StatusLedStates::Error => self.red_led.set_high().unwrap(),
+            StatusLedStates::Disabled => {}
+        }
+
+        match new_state {
+            StatusLedStates::Normal => self.green_led.set_low().unwrap(),
+            StatusLedStates::Alert => {
+                self.red_led.set_low().unwrap();
+                self.green_led.set_low().unwrap();
+            }
+            StatusLedStates::Error => self.green_led.set_low().unwrap(),
+            StatusLedStates::Disabled => {}
+        }
+
+        new_state
+    }
+}
+
+/// Triple LED status, mapped as follows:
+/// - [`Gpio6`] is a green LED
+/// - [`Gpio7`] is a yellow LED
+/// - [`Gpio8`] is a red LED
+#[cfg(any(doc, feature = "triple_status"))]
+pub struct Triple {
+    normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
+    alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
+    error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
+}
+
+#[cfg(any(doc, feature = "triple_status"))]
+impl LedControl for Triple {
+    fn init(
+        gpio6: Pin<Gpio6, FunctionNull, PullDown>,
+        gpio7: Pin<Gpio7, FunctionNull, PullDown>,
+        gpio8: Pin<Gpio8, FunctionNull, PullDown>,
+    ) -> Option<&'static mut StatusLedBase<Self>> {
+        singleton!(: StatusLedBase<Triple> = StatusLedBase {
+            state: StatusLedStates::Alert,
+            ctrl: Triple {
+                normal_led: gpio6.into_push_pull_output_in_state(PinState::Low),
+                alert_led: gpio7.into_push_pull_output_in_state(PinState::High),
+                error_led: gpio8.into_push_pull_output_in_state(PinState::Low),
+            }
+        })
+    }
+
+    fn set_led(
+        &mut self,
+        old_state: &StatusLedStates,
+        new_state: StatusLedStates,
+    ) -> StatusLedStates {
+        match old_state {
+            StatusLedStates::Normal => self.normal_led.set_low().unwrap(),
+            StatusLedStates::Alert => self.alert_led.set_low().unwrap(),
+            StatusLedStates::Error => self.error_led.set_low().unwrap(),
+            StatusLedStates::Disabled => {}
+        }
+        match new_state {
+            StatusLedStates::Normal => self.normal_led.set_high().unwrap(),
+            StatusLedStates::Alert => self.alert_led.set_high().unwrap(),
+            StatusLedStates::Error => self.error_led.set_high().unwrap(),
+            StatusLedStates::Disabled => {}
+        }
+
+        new_state
     }
 }

@@ -7,8 +7,12 @@ use cortex_m::singleton;
 use defmt::trace;
 use defmt::{debug, warn, Format, Formatter};
 
+#[cfg(feature = "rgba_status")]
+use crate::components::Rgba;
+#[cfg(feature = "triple_status")]
+use crate::components::Triple;
 use crate::{
-    components::{StatusLed, StatusLedMulti},
+    components::{StatusLed, StatusLedBase},
     interrupt::BUFFERS,
 };
 
@@ -36,11 +40,16 @@ impl SampleCounter {
         match self.0.checked_add(1) {
             None => critical_section::with(|cs| {
                 debug!("critical_section: counter set_error overflow");
-                #[cfg(feature = "led_status")]
-                StatusLedMulti::set_error(
+                #[cfg(feature = "rgba_status")]
+                StatusLedBase::<Rgba>::set_error(
                     cs,
                     Some("No ADC transfer in progress! Unable to collect latest readings"),
-                )
+                );
+                #[cfg(feature = "triple_status")]
+                StatusLedBase::<Triple>::set_error(
+                    cs,
+                    Some("No ADC transfer in progress! Unable to collect latest readings"),
+                );
             }),
             Some(new_counter) => self.0 = new_counter,
         }
