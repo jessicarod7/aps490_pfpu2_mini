@@ -54,9 +54,6 @@ pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 /// Main operation loop
 #[entry]
 fn main() -> ! {
-    // #[cfg(all(feature = "multi_status", feature = "rgba_status"))]
-    // panic!("Please select one LED status feature: `multi_status` or `rgba_status`");
-
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
     let core = pac::CorePeripherals::take().unwrap();
@@ -98,7 +95,7 @@ fn main() -> ! {
     // Setup status LEDs
     debug!("critical_section: init status LEDs");
     critical_section::with(|cs| {
-        #[cfg(feature = "multi_status")]
+        #[cfg(feature = "led_status")]
         STATUS_LEDS.replace(cs, StatusLedMulti::init(pins.gpio6, pins.gpio7, pins.gpio8))
     });
 
@@ -157,7 +154,7 @@ fn main() -> ! {
     syst.set_clock_source(SystClkSource::Core); // 1 us per tick
     syst.set_reload(20_000);
     syst.clear_current();
-    #[cfg(feature = "disable")]
+    #[cfg(feature = "disable_switch")]
     syst.enable_interrupt();
 
     // Begin normal system operation

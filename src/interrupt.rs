@@ -24,7 +24,7 @@ use crate::{
 };
 
 /// Status LEDs for access in interrupts
-#[cfg(any(doc, feature = "multi_status"))]
+#[cfg(any(doc, feature = "led_status"))]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedMulti>>> =
     Mutex::new(RefCell::new(None));
 
@@ -197,14 +197,14 @@ fn DMA_IRQ_0() {
         });
         if contact_detected {
             critical_section::with(|cs| {
-                #[cfg(feature = "multi_status")]
+                #[cfg(feature = "led_status")]
                 let buffers = BUFFERS.take(cs).unwrap();
                 StatusLedMulti::set_alert(cs, Some(DetectionMsg::create(buffers)));
                 BUFFERS.replace(cs, Some(buffers));
             });
         } else if reset_detected {
             critical_section::with(|cs| {
-                #[cfg(feature = "multi_status")]
+                #[cfg(feature = "led_status")]
                 StatusLedMulti::set_normal(cs, None)
             })
         }
@@ -216,7 +216,7 @@ fn DMA_IRQ_0() {
         // Report error if FIFO is not active
         critical_section::with(|cs| {
             debug!("critical_section: dma set_error for no active FIFO");
-            #[cfg(feature = "multi_status")]
+            #[cfg(feature = "led_status")]
             StatusLedMulti::set_error(
                 cs,
                 Some("No ADC transfer in progress! Unable to collect latest readings"),
@@ -245,13 +245,13 @@ fn SysTick() {
         {
             critical_section::with(|cs| {
                 debug!("critical_section: system disabled by switch");
-                #[cfg(feature = "multi_status")]
+                #[cfg(feature = "led_status")]
                 StatusLedMulti::set_disabled(cs, Some("System disabled by switch."))
             });
         } else if switch.is_low().unwrap() {
             critical_section::with(|cs| {
                 debug!("critical_section: system disabled by switch");
-                #[cfg(feature = "multi_status")]
+                #[cfg(feature = "led_status")]
                 StatusLedMulti::set_normal(cs, Some("System disabled by switch."))
             });
         }

@@ -32,7 +32,7 @@ impl SampleCounter {
         match self.0.checked_add(1) {
             None => critical_section::with(|cs| {
                 debug!("critical_section: counter set_error overflow");
-                #[cfg(feature = "multi_status")]
+                #[cfg(feature = "led_status")]
                 StatusLedMulti::set_error(
                     cs,
                     Some("No ADC transfer in progress! Unable to collect latest readings"),
