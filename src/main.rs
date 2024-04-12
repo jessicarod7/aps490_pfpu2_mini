@@ -1,5 +1,8 @@
 //! Provides contact detection with a high-conductivity surface (such as brain tissue)
 //! for an autopsy saw.
+
+// SPDX-License-Identifier: Apache-2.0
+
 #![no_std]
 #![no_main]
 #![warn(missing_docs)]

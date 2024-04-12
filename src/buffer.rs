@@ -1,3 +1,6 @@
+
+// SPDX-License-Identifier: Apache-2.0
+
 use cortex_m::singleton;
 #[allow(unused_imports)]
 use defmt::trace;

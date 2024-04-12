@@ -4,6 +4,7 @@ version = "0.2.0"
 description = "FSM for saw MCU"
 edition = "2021"
 license = "GPL-2.0-only"
+license = "Apache-2.0"
 repository = "https://github.com/cam-rod/aps490_mini"
 
 [package.metadata.docs.rs]

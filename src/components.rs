@@ -1,4 +1,7 @@
 //! Basic component structs
+
+// SPDX-License-Identifier: Apache-2.0
+
 use cortex_m::{prelude::_embedded_hal_PwmPin, singleton};
 use critical_section::CriticalSection;
 use defmt::{debug, error, info, warn};

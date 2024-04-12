@@ -1,5 +1,7 @@
 //! Interrupt and exception handlers, plus static [`Mutex`].
 
+// SPDX-License-Identifier: Apache-2.0
+
 use core::{cell::RefCell, cmp::Ordering};
 
 use cortex_m_rt::exception;
