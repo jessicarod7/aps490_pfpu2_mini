@@ -1,14 +1,25 @@
 //! Configuration for system state and status LED control
 
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2024 Cameron Rodriguez
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 use cortex_m::{prelude::_embedded_hal_PwmPin, singleton};
 use critical_section::CriticalSection;
-use defmt::{debug, error, Format, Formatter, info, warn};
+use defmt::{debug, error, info, warn, Format, Formatter};
 use embedded_hal::digital::{OutputPin, PinState};
 use rp2040_hal::{
-    dma,
-    dma::SingleChannel,
+    dma::{single_buffer, SingleChannel},
     gpio::{
         bank0::{Gpio6, Gpio7, Gpio8},
         FunctionNull, FunctionSio, Pin, PullDown, SioOutput,
@@ -35,12 +46,16 @@ pub enum StatusLedStates {
 
 impl Format for StatusLedStates {
     fn format(&self, fmt: Formatter) {
-        defmt::write!(fmt, "{}", match self {
-            StatusLedStates::Normal => "Normal",
-            StatusLedStates::Alert => "Alert",
-            StatusLedStates::Error => "Error",
-            StatusLedStates::Disabled => "Disabled",
-        });
+        defmt::write!(
+            fmt,
+            "{}",
+            match self {
+                StatusLedStates::Normal => "Normal",
+                StatusLedStates::Alert => "Alert",
+                StatusLedStates::Error => "Error",
+                StatusLedStates::Disabled => "Disabled",
+            }
+        );
     }
 }
 
@@ -70,7 +85,27 @@ pub trait StatusLed {
 
 /// Directly controls the LEDs.
 pub trait LedControl {
-    /// Initialize LEDs
+    /// Initialize LEDs.
+    ///
+    /// Example:
+    ///
+    /// ```no_run
+    /// # use defmt::debug;
+    /// # use rp2040_hal::{pac, Sio};
+    /// # use rp2040_hal::gpio::Pins;
+    /// #
+    /// # let mut pac = pac::Peripherals::take().unwrap();
+    /// # let sio = Sio::new(pac.SIO);
+    /// # let pins = Pins::new(pac.IO_BANK0, pac.PADS_BANK0, sio.gpio_bank0, &mut pac.RESETS);
+    /// #
+    /// debug!("critical_section: init status LEDs");
+    /// critical_section::with(|cs| {
+    ///     #[cfg(feature = "rgba_status")]
+    ///     STATUS_LEDS.replace(cs, Rgba::init(pins.gpio6, pins.gpio7, pins.gpio8));
+    ///     #[cfg(feature = "triple_status")]
+    ///     STATUS_LEDS.replace(cs, Triple::init(pins.gpio6, pins.gpio7, pins.gpio8));
+    /// });
+    /// ```
     fn init(
         gpio6: Pin<Gpio6, FunctionNull, PullDown>,
         gpio7: Pin<Gpio7, FunctionNull, PullDown>,
@@ -197,7 +232,7 @@ impl<C: LedControl> StatusLed for StatusLedBase<C> {
         let config = SIGNAL_CONF.replace(cs, None);
         if let Some(mut inner) = config {
             inner.0.enable_irq0();
-            let new_transfer = dma::single_buffer::Config::new(inner.0, inner.1, inner.2);
+            let new_transfer = single_buffer::Config::new(inner.0, inner.1, inner.2);
             READINGS_FIFO.replace(cs, Some(new_transfer.start()));
         } else {
             warn!("Failed to restore FIFO config");
@@ -223,6 +258,7 @@ pub struct Rgba {
 
 #[cfg(any(doc, feature = "rgba_status"))]
 impl LedControl for Rgba {
+    #[allow(refining_impl_trait)]
     fn init(
         gpio6: Pin<Gpio6, FunctionNull, PullDown>,
         gpio7: Pin<Gpio7, FunctionNull, PullDown>,
@@ -273,13 +309,17 @@ impl LedControl for Rgba {
 /// - [`Gpio8`] is a red LED
 #[cfg(any(doc, feature = "triple_status"))]
 pub struct Triple {
+    /// Green
     normal_led: Pin<Gpio6, FunctionSio<SioOutput>, PullDown>,
+    /// Yellow
     alert_led: Pin<Gpio7, FunctionSio<SioOutput>, PullDown>,
+    /// Red
     error_led: Pin<Gpio8, FunctionSio<SioOutput>, PullDown>,
 }
 
 #[cfg(any(doc, feature = "triple_status"))]
 impl LedControl for Triple {
+    #[allow(refining_impl_trait)]
     fn init(
         gpio6: Pin<Gpio6, FunctionNull, PullDown>,
         gpio7: Pin<Gpio7, FunctionNull, PullDown>,

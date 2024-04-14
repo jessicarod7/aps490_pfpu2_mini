@@ -1,28 +1,33 @@
-//! This [RP2040](rp2040_hal) project provides contact detection with a highly-conductivity/highly-capacitive surface (such as brain tissue)
-//! for an autopsy saw. For more information, check out [the repo](https://github.com/cam-rod/aps490_pfpu2_mini).
-//!
-//! ## Crate features
-//!
-//! - `triple_status`: Enables the use of 3 LEDs to provide system status. This is the main user interface
-//!   for the tool, and is enabled by default.
-//! - `rgba_status`: Alternate configuration which uses a single common-anode RGB LED. This is the design which appears in
-//!   [our schematic](https://github.com/cam-rod/aps490_retraction_fsm/blob/hardware/aps490_detection/aps490_detection-schematic.pdf).
-//! - `trace_avg_samples`: Logs the average voltage difference measured, 250 samples at a time. See [`Buffers::trace_avg_samples`].
-//! - `trace_indiv_samples` Logs information on every sample recorded. Very noisy! See
-//!   [`interrupt::AlignedAverages::trace_high_index`] and [`interrupt::trace_indiv_samples`]
-//! - `disable_switch`: Starts the SysTick timer to check the disable switch status. Never tested this
-//!   feature, and I'm pretty sure my implementation will cause the system to panic due to poor synchronization.
-//!   This functionality should be redesigned before enabling the feature.
-//! 
-//! <div class="warning">Features `triple_status` and `rgba_status` are mutually exclusive.</div>
+//! Binary used in proof-of-concept
 
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2024 Cameron Rodriguez
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #![no_std]
 #![no_main]
 #![warn(missing_docs)]
 #![cfg_attr(docsrs, feature(doc_cfg), feature(doc_auto_cfg), feature(doc_cfg_hide))]
 
+#[cfg(feature = "rgba_status")]
+use aps490_pfpu2_mini::components::Rgba;
+#[cfg(feature = "triple_status")]
+use aps490_pfpu2_mini::components::Triple;
+use aps490_pfpu2_mini::{
+    buffer::{create_avg_buffer, Buffers},
+    components::{LedControl, StatusLed, StatusLedBase},
+    interrupt::{DISABLE_SWITCH, READINGS_FIFO, SIGNAL_GEN, STATUS_LEDS},
+};
 use cortex_m::peripheral::syst::SystClkSource;
 use defmt::{debug, info, warn};
 #[allow(unused_imports)]
@@ -31,31 +36,17 @@ use embedded_hal::pwm::SetDutyCycle;
 #[allow(unused_imports)]
 use panic_probe as _;
 use rp2040_hal::{
+    adc::{Adc, AdcPin},
     clocks::init_clocks_and_plls,
-    dma,
-    dma::{DMAExt, SingleChannel},
+    dma::{single_buffer, DMAExt, SingleChannel},
     entry,
     fugit::RateExtU32,
     gpio::Pins,
     pac,
     prelude::*,
     pwm::Slices,
-    Adc, Sio, Watchdog,
+    Sio, Watchdog,
 };
-
-#[cfg(feature = "rgba_status")]
-use crate::components::Rgba;
-#[cfg(feature = "triple_status")]
-use crate::components::Triple;
-use crate::{
-    buffer::{create_avg_buffer, Buffers},
-    components::{LedControl, StatusLed, StatusLedBase},
-    interrupt::{DISABLE_SWITCH, READINGS_FIFO, SIGNAL_GEN, STATUS_LEDS},
-};
-
-mod buffer;
-mod components;
-mod interrupt;
 
 /// Second-stage bootloader, from [rp2040-boot2](https://docs.rs/rp2040-boot2)
 #[link_section = ".boot2"]
@@ -73,7 +64,7 @@ pub static SIGNAL_GEN_FREQ_HZ: f32 = 100_000.0;
 fn main() -> ! {
     #[cfg(all(feature = "triple_status", feature = "rgba_status"))]
     compile_error!("Features `triple_status` and `rgba_status` cannot be enabled at the same time in crate aps490_pfpu2_mini");
-    
+
     info!("Detection system startup");
     let mut pac = pac::Peripherals::take().unwrap();
     let core = pac::CorePeripherals::take().unwrap();
@@ -140,7 +131,7 @@ fn main() -> ! {
 
     // Setup ADC pins, DMA, buffers
     let mut adc = Adc::new(pac.ADC, &mut pac.RESETS);
-    let mut adc_pin0 = rp2040_hal::adc::AdcPin::new(pins.gpio26.into_floating_input()).unwrap();
+    let mut adc_pin0 = AdcPin::new(pins.gpio26.into_floating_input()).unwrap();
     let mut dma = pac.DMA.split(&mut pac.RESETS);
     Buffers::init();
 
@@ -161,7 +152,7 @@ fn main() -> ! {
         .start_paused();
     dma.ch0.enable_irq0();
     let adc_dma_transfer =
-        dma::single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer);
+        single_buffer::Config::new(dma.ch0, readings_fifo.dma_read_target(), avg_buffer);
     debug!("critical_section: transfer readings FIFO to mutex");
     critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(adc_dma_transfer.start())));
     readings_fifo.resume();

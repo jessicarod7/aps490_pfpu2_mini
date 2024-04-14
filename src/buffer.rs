@@ -1,6 +1,18 @@
 //! Buffers for recording data from the ADC, and tracking long-term averages from the detection system.
 
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2024 Cameron Rodriguez
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 use cortex_m::singleton;
 #[allow(unused_imports)]
@@ -236,11 +248,19 @@ impl Buffers {
 
     /// Shortcut to return index of a successful detection sample.
     ///
-    ///```rust
-    /// static BUFFERS = Buffers::init();
+    ///```no_run
+    /// use std::cell::RefCell;
+    /// use critical_section::Mutex;
+    /// use aps490_pfpu2_mini::buffer::Buffers;
+    /// 
+    /// pub static BUFFERS: Mutex<RefCell<Option<&'static mut Buffers>>> = Mutex::new(RefCell::new(None));
     ///
-    /// BUFFERS.insert(12);
-    /// assert_eq!(BUFFERS.detection_idx(), BUFFERS.current_sample.get_counter() - 1)
+    /// Buffers::init();
+    /// critical_section::with(|cs| BUFFERS.borrow_ref_mut(cs).as_mut().unwrap().insert(12));
+    /// critical_section::with(|cs| {
+    ///    let buf = BUFFERS.borrow_ref_mut(cs).as_mut().unwrap();
+    ///    assert_eq!(buf.detection_idx(), buf.current_wrapped().get_counter() - 1)
+    /// });
     ///```
     pub fn detection_idx(&self) -> usize {
         self.current_sample.get_counter() - 1

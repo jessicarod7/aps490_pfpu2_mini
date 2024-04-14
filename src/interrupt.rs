@@ -1,19 +1,30 @@
 //! Interrupt and exception handlers, plus static [`Mutex`].
 
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2024 Cameron Rodriguez
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 use core::{cell::RefCell, cmp::Ordering};
 
 use cortex_m_rt::exception;
 use critical_section::Mutex;
-use defmt::{debug, Format};
 #[allow(unused_imports)]
 use defmt::trace;
+use defmt::{debug, Format};
 use embedded_hal::digital::InputPin;
 use rp2040_hal::{
     adc::DmaReadTarget,
-    dma,
-    dma::{single_buffer::Transfer, Channel, CH0},
+    dma::{single_buffer, single_buffer::Transfer, Channel, CH0},
     gpio::{bank0::Gpio9, FunctionSio, Pin, PullDown, SioInput},
     pac::interrupt,
     pwm,
@@ -42,7 +53,8 @@ pub type SignalGenConfig = (Channel<CH0>, DmaReadTarget<u8>, &'static mut [u8; 4
 #[cfg(feature = "rgba_status")]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedBase<Rgba>>>> =
     Mutex::new(RefCell::new(None));
-/// Status LEDs for access in interrupts. There is a nearly identical mplementation for feature `rgba_status`, which does not appear here.
+/// Status LEDs for access in interrupts. There is a nearly identical implementation for feature
+/// `rgba_status`, which does not appear here.
 #[cfg(any(doc, feature = "triple_status"))]
 pub static STATUS_LEDS: Mutex<RefCell<Option<&'static mut StatusLedBase<Triple>>>> =
     Mutex::new(RefCell::new(None));
@@ -221,7 +233,7 @@ fn DMA_IRQ_0() {
             })
         }
 
-        let new_dma_transfer = dma::single_buffer::Config::new(dma_ch, dma_from, avg_buffer);
+        let new_dma_transfer = single_buffer::Config::new(dma_ch, dma_from, avg_buffer);
         debug!("critical_section: start new DMA transfer");
         critical_section::with(|cs| READINGS_FIFO.replace(cs, Some(new_dma_transfer.start())));
     } else {
@@ -242,7 +254,8 @@ fn DMA_IRQ_0() {
     }
 }
 
-/// Records the following information about a 2 ms sample (note all measurements are 8 bits on a 3.3 V signal):
+/// Records the following information about a 2 ms sample (note all measurements are 8 bits on a
+/// <span style="white-space:nowrap;">3.3 V</span> signal):
 /// - Maximum voltage recorded
 /// - Minimum voltage recorded
 /// - Average voltage from higher half
@@ -252,7 +265,7 @@ fn DMA_IRQ_0() {
 ///
 /// Example of a trace:
 ///
-/// ```
+/// ```shell
 /// [TRACE] interrupt.rs:59    => max: Some(255) // min: Some(0) // avg1: 127 // avg2: 127
 /// -> all_unique samples: [Some(0), Some(1), Some(2), Some(3), None, None, None, None, None, None, None, None, None, None, None, None, Some(16), Some(17), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(95), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(140), Some(141), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(231), Some(232), Some(233), Some(234), Some(235), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, Some(253), Some(254), Some(255)]
 /// ```
@@ -275,7 +288,8 @@ pub fn trace_indiv_samples(avg_buffer: &[u8; 4000], avgs: &AlignedAverages) {
 
 /// ISR for SysTick, used for checking [`DisableSwitch`]
 ///
-/// Lazily takes ownership of [`DISABLE_SWITCH`] as it will not be used again in the main runtime again.
+/// Lazily takes ownership of [`DISABLE_SWITCH`] as it will not be used again in the main runtime
+/// again.
 #[exception]
 fn SysTick() {
     static mut DISABLE_SWITCH_ISR: Option<DisableSwitch> = None;

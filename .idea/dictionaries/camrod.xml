@@ -2,10 +2,13 @@
   <dictionary name="camrod">
     <words>
       <w>avgs</w>
+      <w>defmt</w>
       <w>indiv</w>
       <w>ksamples</w>
       <w>leds</w>
       <w>longterm</w>
+      <w>pfpu</w>
+      <w>plls</w>
       <w>sysclk</w>
       <w>syst</w>
       <w>xosc</w>
