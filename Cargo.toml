@@ -1,12 +1,12 @@
 [package]
 name = "aps490_pfpu2_mini"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Cameron Rodriguez <dev@camrod.me", "PFPU2 team (Zainab Ali, Olivia Lotzer, Cameron Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
 categories = ["embedded", "no-std", "science"]
 description = "Control software for PFPU2 automated brain detection system"
 documentation = "https://docs.rs/aps490_pfpu2_mini"
 edition = "2021"
-exclude = ["logs/", ".idea/", "Capstone_Poster_FINAL_-_cmyk_300_dpi.pdf"]
+include = [".cargo/", "/.gitignore", "build.rs", "memory.x", "src/", "rustfmt.toml", "Cargo.lock", "Cargo.toml", "Embed.toml", "LICENSE", "NOTICE", "README.md"]
 keywords = ["capstone", "RP2040", "autopsy", "brain", "contact-detection"]
 license = "Apache-2.0"
 readme = "README.md"
