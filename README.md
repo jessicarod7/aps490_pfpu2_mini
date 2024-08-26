@@ -22,7 +22,7 @@ contact with highly conductive surfaces, and shows indications of doing the same
 If you're building on the design, here are some useful references:
 
 - The schematic for our design can be found in the hardware branch
-  of [cam-rod/aps490_retraction_fsm](https://github.com/cam-rod/aps490_retraction_fsm/tree/hardware).
+  of [jessicarod7/aps490_retraction_fsm](https://github.com/jessicarod7/aps490_retraction_fsm/tree/hardware).
   Don't copy the battery charger, instead reference
   the [Pi Pico datasheet §4.5-4.6](https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf#page-21).
 - Look at the high/low voltage range of the signal, but also _the voltage itself_. I found it
@@ -40,11 +40,11 @@ We are undergraduate students completing our BASc:
 
 - Zainab Ali, Mechanical Engineering
 - Olivia Lotzer, Mechanical Engineering
-- Cameron Rodriguez, Computer Engineering
+- Jessica Rodriguez, Computer Engineering
 - Tina Sokhanvar, Mechanical Engineering
 - Zeynep Tibik, Mechanical Engineering
 
-I'm Cameron, and wrote the software in this repo.
+I'm Jessica, and wrote the software in this repo.
 
 ## Acknowledgements
 
@@ -71,7 +71,7 @@ SawStop and all related terms are trademarks or registered trademarks of SawStop
 
 ## License
 
-Copyright 2024 Cameron Rodriguez
+Copyright 2024 Jessica Rodriguez
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

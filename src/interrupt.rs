@@ -1,6 +1,6 @@
 //! Interrupt and exception handlers, plus static [`Mutex`].
 
-// Copyright 2024 Cameron Rodriguez
+// Copyright 2024 Jessica Rodriguez
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

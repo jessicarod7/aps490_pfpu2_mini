@@ -1,7 +1,7 @@
 [package]
 name = "aps490_pfpu2_mini"
-version = "0.4.1"
-authors = ["Cameron Rodriguez <dev@camrod.me", "PFPU2 team (Zainab Ali, Olivia Lotzer, Cameron Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
+version = "0.4.2"
+authors = ["Jessica Rodriguez <dev@jessicarod.com>", "PFPU2 team (Zainab Ali, Olivia Lotzer, Jessica Rodriguez, Tina Sokhanvar, Zeynep Tibik)"]
 categories = ["embedded", "no-std", "science"]
 description = "Control software for PFPU2 automated brain detection system"
 documentation = "https://docs.rs/aps490_pfpu2_mini"
@@ -10,7 +10,7 @@ include = [".cargo/", "/.gitignore", "build.rs", "memory.x", "src/", "rustfmt.to
 keywords = ["capstone", "RP2040", "autopsy", "brain", "contact-detection"]
 license = "Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/cam-rod/aps490_pfpu2_mini"
+repository = "https://github.com/jessicarod7/aps490_pfpu2_mini"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

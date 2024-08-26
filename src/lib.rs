@@ -1,13 +1,13 @@
 //! This [RP2040](rp2040_hal) project provides contact detection with a
 //! highly-conductivity/highly-capacitive surface (such as brain tissue) for an autopsy saw. For
-//! more information, check out [the repo](https://github.com/cam-rod/aps490_pfpu2_mini).
+//! more information, check out [the repo](https://github.com/jessicarod7/aps490_pfpu2_mini).
 //!
 //! ## Crate features
 //!
 //! - `triple_status`: Enables the use of 3 LEDs to provide system status. This is the main user
 //!   interface for the tool, and is enabled by default.
 //! - `rgba_status`: Alternate configuration which uses a single common-anode RGB LED. This is the design which appears in
-//!   [our schematic](https://github.com/cam-rod/aps490_retraction_fsm/blob/hardware/aps490_detection/aps490_detection-schematic.pdf).
+//!   [our schematic](https://github.com/jessicarod7/aps490_retraction_fsm/blob/hardware/aps490_detection/aps490_detection-schematic.pdf).
 //! - `trace_avg_samples`: Logs the average voltage difference measured, 250 samples at a time. See
 //!   [`buffer::Buffers::trace_avg_samples`].
 //! - `trace_indiv_samples` Logs information on every sample recorded. Very noisy! See
@@ -21,7 +21,7 @@
 //!
 //! ## Demo
 //!
-//! The following is a simplified (including [`Rgba`](components::Rgba)-only lights) implementation of the [binary crate](https://github.com/cam-rod/aps490_pfpu2_mini/blob/main/src/main.rs)
+//! The following is a simplified (including [`Rgba`](components::Rgba)-only lights) implementation of the [binary crate](https://docs.rs/crate/aps490_pfpu2_mini/latest/source/src/main.rs)
 //! used on our proof-of-concept.
 //!
 //! ```no_run
@@ -157,7 +157,7 @@
 //! }
 //! ```
 
-// Copyright 2024 Cameron Rodriguez
+// Copyright 2024 Jessica Rodriguez
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
